@@ -54,7 +54,7 @@ PUBMED_TOOL_DESCRIPTION = {
     "type": "function",
     "function": {
         "name": PUBMED_TOOL_NAME,
-        "description": "Get abstracts or the full text of biomedical and life sciences articles from PubMed Central.",
+        "description": "Get abstracts or the full text of ion transport and separation articles from PubMed Central.",
         "parameters": {
             "type": "object",
             "properties": {
