@@ -50,6 +50,13 @@ nanobody-design = [
     "torch",
     "transformers",
 ]
+dev = [
+    "mypy",
+    "pytest",
+    "flake8",
+    "black",
+    "isort",
+]
 
 [tool.hatch.version]
 path = "src/virtual_lab/__about__.py"
