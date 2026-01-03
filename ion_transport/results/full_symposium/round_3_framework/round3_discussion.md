@@ -1,0 +1,3191 @@
+## User
+
+This is the beginning of a team meeting to discuss your research project. This is a meeting with the team lead, Symposium Chair and PI, and the following team members: Electrochemistry Scientist, Membrane Science Expert, Biological Ion Transport Scientist, Iontronics Scientist, Scientific Critic.
+
+Here are summaries of the previous meetings:
+
+[begin summary 1]
+
+### Agenda
+Map and critically compare how electrochemistry, membrane science, biological ion transport, and iontronics formulate ion transport—specifically:
+1) the **governing flux equation** and its assumptions/breakdown regimes,  
+2) the **physical basis of selectivity** and how it is measured, and  
+3) the **origin of limiting/saturation behavior** (bulk vs interface vs boundary layer), with quantitative anchors.  
+Then synthesize common mathematical foundations, reconcile terminology, and define what must be clarified next via a shared benchmark.
+
+---
+
+### Team Member Input
+
+#### Electrochemistry Scientist
+**Fundamental equations (assumptions first):**
+- Uses **continuum transport**; typically **electroneutral bulk** (double layers treated as thin); often **no convection** in separators; isothermal.
+- Dilute form: **Nernst–Planck**  
+  \[
+  \mathbf{J}_i=-D_i\nabla c_i-\frac{z_iD_iF}{RT}c_i\nabla\phi + c_i\mathbf{u}
+  \]
+- Battery-relevant closure: **concentrated-solution (Newman/Stefan–Maxwell)** with conductivity \(\kappa(c)\), thermodynamic factor \(\chi\), and **cation transference number** \(t_+^0\) (solvent frame):
+  \[
+  i_e=-\kappa_\text{eff}\nabla\phi_e+\frac{2RT\kappa_\text{eff}}{F}(1-t_+^0)\chi\nabla\ln c
+  \]
+  plus salt conservation with a source term \(\propto (1-t_+^0)\nabla\cdot i_e\).
+- Breakdown: concentrated electrolytes without good parameterization; nanoconfinement/strong charge (Poisson needed); high-rate depletion where coefficients become strongly state-dependent.
+
+**Mechanisms / dimensionless groups:**
+- Diffusion + migration dominate; convection usually negligible in separators.
+- Uses Damköhler-like transport criteria (reaction demand vs transport supply), and effective-medium corrections \(D_\text{eff}=D\varepsilon/\tau\).
+
+**Selectivity:**
+- In batteries, “selectivity” often means **transport selectivity** via \(t_+^0\) (how current partitions between ions). Measurement: eNMR, Hittorf, polarization (with artifacts).
+- Noted reference-frame ambiguity: different \(t_+\) depending on frame/method.
+
+**Limiting phenomena (numbers):**
+- Classical diffusion-limited current:
+  \[
+  i_\text{lim}\approx zF\frac{Dc}{\delta}
+  \]
+  Example: \(D=10^{-10}\,\mathrm{m^2/s}\), \(c=1\,\mathrm{M}\), \(\delta=100\,\mu\mathrm{m}\) → \(i_\text{lim}\sim 9.6\,\mathrm{mA/cm^2}\).
+- “Soft limiting” via salt depletion reducing \(\kappa(c)\); kinetics limits via Butler–Volmer; possible space-charge/overlimiting in special cases (charged separators/coatings).
+
+**Critical challenge:**
+- Predicting \(t_+^0\), \(\chi\), \(D(c)\), \(\kappa(c)\) from chemistry; interphase (SEI) transport predictability.
+
+---
+
+#### Membrane Science Expert
+**Fundamental equations (assumptions first):**
+- Unifying form: flux driven by **electrochemical potential gradient**; practical models depend on membrane class.
+- **IEM/ED:** Nernst–Planck in membrane + **electroneutrality in membrane bulk** with fixed charge \(X\), plus **Donnan equilibrium** at interfaces.
+  - Example closure for 1:1 salt in CEM: \(c_+^m-c_-^m=X\).
+- **NF:** hindered Nernst–Planck with convection and hindrance factors \(K_{d,i},K_{c,i}\).
+- **RO:** solution–diffusion (phenomenological \(P_s\), \(A\)).
+- Breakdown: high current (space charge, water splitting), very small pores (continuum dielectric/viscosity issues), multicomponent non-ideality.
+
+**Mechanisms / dimensionless groups:**
+- ED: diffusion boundary layers (concentration polarization, CP) dominate limiting behavior.
+- NF/RO: convection + diffusion + CP; fouling/scaling adds evolving resistances.
+- Introduced **Dukhin number (Du)** as a discriminator for surface vs bulk conduction; emphasized that Poisson-needed regime can be driven by **high \(i/i_\text{lim}\)** as well as small pores.
+
+**Selectivity (quantitative):**
+- Determinants: fixed charge (Donnan exclusion), sterics (pore size vs hydrated ion), dielectric/solvation exclusion, specific binding (specialized).
+- Quant example (ideal Donnan, 1:1 salt): \(X=1\,\mathrm{M}\), \(c_b=0.1\,\mathrm{M}\) → \(c_-^m\approx 0.01\,\mathrm{M}\) (≈10× co-ion exclusion).
+- Transport selectivity: **permselectivity** \(\alpha\) and mapping to membrane transport number:
+  \[
+  \alpha \approx 2t_+^m-1 \Rightarrow t_+^m\approx \frac{1+\alpha}{2}
+  \]
+  Example: \(\alpha=0.95\Rightarrow t_+^m\approx 0.975\) (with stated dilute/ideal caveats).
+
+**Limiting phenomena (numbers):**
+- ED limiting current (CP-controlled):
+  \(D=10^{-9}\,\mathrm{m^2/s}\), \(c_b=0.01\,\mathrm{M}\), \(\delta=100\,\mu\mathrm{m}\) → \(i_\text{lim}\approx 0.96\,\mathrm{mA/cm^2}\).
+- Overlimiting mechanisms: electroconvection, surface conduction, water splitting—regime-dependent.
+- RO/NF “limiting flux”: CP increases \(c_m\) and osmotic pressure; film theory \(c_m/c_b=\exp(J_w/k)\).
+
+**Critical challenge:**
+- Predicting selectivity and limiting behavior in **multicomponent** feeds with non-ideal thermodynamics and evolving fouling layers.
+
+---
+
+#### Biological Ion Transport Scientist
+**Fundamental equations (assumptions first):**
+- Two modeling tiers:
+  1) **GHK/PNP continuum electrodiffusion** (steady state; constant field for GHK; mean-field; often ideal; no explicit correlations).
+  2) **Discrete-state/occupancy kinetics** (multi-ion binding sites; knock-on; voltage-dependent rates).
+- Emphasized: in narrow selectivity filters, \(\mu^{ex}\) is dominant; continuum PNP often fails quantitatively.
+
+**Mechanisms / dimensionless ideas:**
+- Competition between **access limitation** (diffusion to pore mouth) and **in-pore limitation** (barriers/occupancy).
+- Proposed series-resistance view: \(R_\text{total}=R_\text{access}+R_\text{pore}\).
+
+**Selectivity (quantitative):**
+- Determinant: **free-energy discrimination** for transfer from water to filter (dehydration + coordination geometry + correlations).
+- Metric: permeability ratio from reversal potentials; typical \(P_K/P_{Na}\sim 10^2–10^4\).
+- Energy scale: if \(P_K/P_{Na}=10^3\), then \(\Delta\Delta G\approx RT\ln(10^3)\approx 17\,\mathrm{kJ/mol}\) (~7 \(k_BT\)). Stated explicitly that mapping is conditionally valid (fails with strong multi-ion kinetics).
+
+**Limiting/saturation (numbers):**
+- Saturation with concentration via occupancy (Michaelis–Menten-like \(i(c)=i_\text{max}c/(K_m+c)\)).
+- Access resistance estimate: \(R_\text{access}\approx 1/(4a\kappa)\). For \(a=0.5\,\mathrm{nm}\), \(\kappa\sim 1\,\mathrm{S/m}\) → \(R\sim 5\times 10^8\,\Omega\), giving an upper-bound \(i\sim 200\,\mathrm{pA}\) at 100 mV.
+- Typical single-channel currents: 1–20 pA at 100 mV → \(6\times 10^7\) ions/s for 10 pA.
+
+**Critical challenge:**
+- Predicting selectivity + conductance from structure (dehydration, correlations, polarization, boundary conditions); translating to synthetic analogs without losing mechanism.
+
+---
+
+#### Iontronics Scientist
+**Fundamental equations (assumptions first):**
+- Uses Nernst–Planck/continuity but must include **ion–electron coupling**:
+  \[
+  \partial_t c_i+\nabla\cdot \mathbf{J}_i = R_i
+  \]
+  where \(R_i\) represents reversible insertion/doping (or irreversible Faradaic reactions if outside stability window).
+- Often assumes quasi-electroneutral polymer bulk; Poisson may matter in fast transients or strong depletion.
+
+**Mechanisms / dimensionless ideas:**
+- Diffusion into polymer sets switching time: \(\tau\sim L^2/D_\text{ion}\).
+- Distinguishes transport-limited vs capacity-limited vs stability-limited regimes.
+
+**Selectivity (quantitative):**
+- Partition/transport selectivity via fixed charge and polymer affinity; measurable via uptake (ICP-MS, XPS), EQCM, transference.
+- Introduced **coupling selectivity** (ion identity → electronic modulation strength). Proposed metric:
+  \[
+  S_i=\frac{\partial \sigma_e}{\partial Q_i}\quad \text{or}\quad \frac{\partial I_D}{\partial Q_i}
+  \]
+  with \(Q=\int I_G dt\) validated by EQCM/optical/EIS to exclude Faradaic artifacts.
+
+**Limiting/saturation (numbers):**
+- Volumetric capacitance \(C^*\sim 10–40\,\mathrm{F/cm^3}\). Example device volume \(10^{-10}\,\mathrm{cm^3}\), \(V_G=0.5\) V → \(Q\sim 10^{-9}\) C → \(6\times 10^9\) ions per switch.
+- Diffusion time example: \(L=100\) nm, \(D=10^{-11}\,\mathrm{m^2/s}\) → \(\tau\sim 1\) ms; \(L=1\,\mu\)m → \(\tau\sim 0.1\) s.
+- Stability-limited by electrochemical window (water electrolysis/polymer degradation).
+
+**Critical challenge:**
+- Separating capacitive gating from Faradaic chemistry; quantifying ion-specific effects and state-dependent \(D\), \(C^*\), swelling.
+
+---
+
+#### Scientific Critic
+- Main critique: “same master equation” is meaningless without **explicit closures** (ideality vs activities, \(\mu^{ex}\), Poisson vs electroneutrality, boundary conditions).
+- Identified selectivity conflation; demanded a taxonomy separating partition vs transport vs kinetic/energetic vs coupling selectivity.
+- Demanded regime maps and dominance criteria (dimensionless numbers, inequalities).
+- Round 2: praised improved closure statements; insisted benchmark must be **fully specified** (geometry, fixed charge representation, reservoir conditions, driving mode, reaction toggles).
+- Requested parameter provenance (method + uncertainty) for key parameters (\(t_+^0\), \(\chi\), \(X\), \(\sigma\), \(C^*\), \(D_\text{ion}\), channel dataset).
+
+---
+
+### Recommendation
+**Adopt a single unified modeling backbone—electrochemical potential–driven transport with continuity—then enforce cross-field comparability by freezing a minimal benchmark (Version 1.0) and a standardized reporting table.**
+
+Concretely:
+
+1) **Unified backbone (mandatory):**
+\[
+\mathbf{J}_i = -\frac{D_i c_i}{RT}\nabla\left(RT\ln a_i + z_iF\phi + \mu_i^{ex}\right) + c_i\mathbf{u},
+\qquad
+\partial_t c_i + \nabla\cdot \mathbf{J}_i = R_i
+\]
+Each field must state closures for \(a_i\), \(\mu_i^{ex}\), \(\phi\) (Poisson vs electroneutrality), \(\mathbf{u}\), and \(R_i\).
+
+2) **Freeze Benchmark A1 (minimal, falsifiable, solvable by all): planar ion-selective interface with diffusion layer**
+- 1:1 binary electrolyte; specify \(c_b\) (two cases: 10 mM and 100 mM), \(T\), \(\delta\).
+- Driving: imposed current \(i\) (and compute \(V\)) up to and beyond \(i_\text{lim}\).
+- Interface selectivity specified by either:
+  - ideal permselective boundary (co-ion flux = 0), or
+  - finite permselectivity via \(t_+^m\) (membrane) / effective boundary condition (electrochemistry).
+- Outputs: \(i\)–\(V\), \(i_\text{lim}\), concentration profiles, and onset of overlimiting mechanisms (if included).
+
+3) **Optional Benchmark A2 (nanopore extension):** cylindrical pore with specified \(a,L,\sigma\) to allow PNP/modified PNP and biology-style “filter module.” This is optional because not all groups can solve it quickly.
+
+4) **Benchmark B1 (pressure-driven CP):** film-theory NF/RO benchmark with specified \(k\), \(A\), \(P_s\) (or equivalent), to compare CP-limited flux and rejection.
+
+5) **Standardized reporting table (mandatory for next meeting):**
+- Governing equation + closures (ideality/activity, Poisson vs EN, \(D_i\), \(\mu^{ex}\), BCs, \(R_i\), \(\mathbf{u}\))
+- Selectivity metrics: (i) partition selectivity, (ii) transport selectivity, (iii) optional coupling selectivity
+- Limiting mechanism + criterion + one number
+- One falsifiable scaling prediction (slope/exponent)
+- One “parameter provenance” line per key parameter (method + typical variability)
+
+**Why this recommendation (justification):**
+- It respects the genuine common foundation identified by all experts (electrochemical potential gradients) while addressing the Critic’s core concern: without closures and benchmark specification, cross-field synthesis is non-falsifiable.
+- It preserves field-specific physics by allowing \(\mu^{ex}\) and \(R_i\) to carry the “special sauce” (binding/crowding in biology; fixed charge in membranes; concentrated thermodynamics in electrochemistry; volumetric storage and stability in iontronics).
+- It yields actionable outputs: a benchmark dataset and a shared “dictionary” that can be used to build a unified conceptual framework and guide experiments.
+
+---
+
+### Answers
+
+#### Agenda Question 1  
+**Question:** What is the governing equation for ion flux in your field? State assumptions.
+
+**Answer (unified across fields):**  
+With assumptions stated explicitly per regime, the governing flux law can be written as:
+\[
+\boxed{\mathbf{J}_i = -\frac{D_i c_i}{RT}\nabla\mu_i + c_i\mathbf{u}}
+\]
+\[
+\boxed{\mu_i=\mu_i^0+RT\ln a_i+z_iF\phi+\mu_i^{ex}}
+\]
+with mass conservation:
+\[
+\boxed{\partial_t c_i+\nabla\cdot\mathbf{J}_i=R_i}
+\]
+
+**Assumptions (must be declared; typical by field):**
+- **Electrochemistry (battery porous media):** electroneutral bulk; concentrated-solution thermodynamics (\(a_\pm=\gamma_\pm c\), thermodynamic factor \(\chi\)); no convection in separator; effective-medium \(D_\text{eff},\kappa_\text{eff}\); interfacial Butler–Volmer at electrodes.
+- **Membranes:** electroneutral membrane bulk with fixed charge \(X\); Donnan equilibrium at interfaces; hindered transport + convection in NF; solution–diffusion in RO; Poisson/space charge needed near depletion/overlimiting or in very small pores.
+- **Biology:** either (i) continuum PNP/GHK (steady, mean-field, often constant field) with effective permeabilities, or (ii) discrete-state occupancy kinetics when \(\mu^{ex}\) is large and structured.
+- **Iontronics:** Nernst–Planck + continuity with a coupling term \(R_i\) representing reversible insertion/volumetric storage (via \(C^*\)) or irreversible Faradaic reactions outside stability window; quasi-electroneutral polymer bulk often assumed.
+
+**Justification:**  
+All teams independently converged on electrochemical potential gradients as the universal driving force; differences are in closures for \(a_i\), \(\mu^{ex}\), \(\phi\), \(\mathbf{u}\), and \(R_i\), which we will now standardize and benchmark.
+
+---
+
+#### Agenda Question 2  
+**Question:** What physical property determines ion selectivity in your system, and how is it measured?
+
+**Answer (taxonomy-based, because “selectivity” is not a single object):**
+
+1) **Partition (equilibrium) selectivity** is determined by differences in **electrochemical potential of transfer** into the membrane/pore/polymer (Donnan electrostatics + sterics + solvation/dehydration; i.e., \(\Delta \mu^{ex}\) and fixed charge).  
+- **Measured by:** sorption/uptake (membranes/iontronics), Donnan/membrane potentials, rejection \(R=1-c_p/c_f\) (RO/NF), or inferred partition coefficients.
+
+2) **Transport selectivity under driving** is determined by relative mobilities and coupling—captured by **transference/transport numbers** \(t_i\), permselectivity \(\alpha\), or permeability ratios \(P_i/P_j\) under specified conditions.  
+- **Measured by:** eNMR/Hittorf/polarization for \(t_+\) (electrochemistry), membrane potential for \(\alpha\) (IEMs), reversal potentials for \(P_i/P_j\) (biology).
+
+3) **(Iontronics-specific) Coupling selectivity** is determined by how strongly a given ion’s insertion changes electronic carrier density/morphology—captured by:
+\[
+S_i=\partial \sigma_e/\partial Q_i \quad \text{or}\quad \partial I_D/\partial Q_i
+\]
+- **Measured by:** integrating gate charge \(Q=\int I_G dt\) with validation (EQCM/optical/EIS) to exclude Faradaic artifacts.
+
+**Quantitative examples (from discussion):**
+- **Membrane Donnan exclusion:** \(X=1\) M, \(c_b=0.1\) M → \(c_-^m\approx 0.01\) M (≈10× co-ion exclusion, ideal Donnan).
+- **Biology:** \(P_K/P_{Na}\sim 10^3\Rightarrow \Delta\Delta G\sim 17\) kJ/mol (useful scale; mapping conditional).
+- **Electrochemistry:** \(t_+^0\sim 0.2–0.4\) in common carbonate electrolytes (method/frame dependent).
+- **Iontronics:** \(C^*\sim 10–40\) F/cm³; small device can move \(Q\sim 10^{-9}\) C (~\(6\times 10^9\) ions) per switch at 0.5 V.
+
+**Justification:**  
+The meeting showed selectivity is multi-definition across fields; the taxonomy prevents category errors (e.g., equating rejection with transference number) and enables direct comparison via the benchmark.
+
+---
+
+#### Agenda Question 3  
+**Question:** What causes the “limiting” or saturation behavior in ion transport for your systems?
+
+**Answer (organized by universal archetypes + field-specific additions):**
+
+**Universal limiting archetypes (shared physics):**
+1) **Boundary-layer / access limitation (diffusion supply):** depletion in a diffusion layer of thickness \(\delta\) or access resistance to a pore mouth.  
+   - Canonical scaling:
+     \[
+     i_\text{lim}\approx zF\frac{Dc_b}{\delta}
+     \]
+   - Numbers:
+     - Electrochemistry example: \(D=10^{-10}\,\mathrm{m^2/s}\), \(c_b=1\) M, \(\delta=100\,\mu\)m → \(i_\text{lim}\sim 9.6\,\mathrm{mA/cm^2}\).
+     - ED example: \(D=10^{-9}\,\mathrm{m^2/s}\), \(c_b=0.01\) M, \(\delta=100\,\mu\)m → \(i_\text{lim}\sim 0.96\,\mathrm{mA/cm^2}\).
+     - Biology access resistance: \(R_\text{access}\approx 1/(4a\kappa)\) gives an upper-bound current scale.
+
+2) **In-medium / in-pore limitation:** finite mobility/hindrance/occupancy inside the membrane/pore/polymer.  
+   - Biology: occupancy-limited saturation \(i(c)=i_\text{max}c/(K_m+c)\).  
+   - NF: hindered diffusion and electromigration in nm pores.  
+   - Iontronics: diffusion into polymer \(\tau\sim L^2/D_\text{ion}\) (e.g., 100 nm, \(10^{-11}\,\mathrm{m^2/s}\) → 1 ms).
+
+3) **Interfacial kinetics / reactions:** Butler–Volmer at electrodes; water splitting at IEM surfaces; Faradaic side reactions in iontronics beyond stability window.
+
+**Field-specific saturation mechanisms:**
+- **Iontronics:** **capacity-limited** saturation due to finite volumetric charge storage \(Q_\text{max}\approx C^*V(\text{volume})V_G\), and **stability-limited** saturation due to electrochemical window.
+- **Biology:** **gating** and **block** can saturate macroscopic current independent of permeation limits.
+- **Membranes:** **overlimiting** currents via electroconvection/surface conduction/water splitting; discriminated by Du and operating regime \(i/i_\text{lim}\).
+- **Electrochemistry:** “soft limiting” via conductivity collapse \(\kappa(c)\) and strong concentration dependence of transport coefficients.
+
+**Justification:**  
+All fields can be mapped onto a small set of limiting archetypes; differences are which element dominates and whether additional state variables (occupancy, doping state, reactions) introduce new ceilings.
+
+---
+
+### Next Steps
+
+1) **Freeze Benchmark A1 and B1 specifications (write them down as a one-page protocol):**
+   - A1: binary 1:1 electrolyte; \(c_b=\{10,100\}\) mM; \(\delta\) fixed (e.g., 100 µm); imposed current sweep; interface selectivity specified by \(t_+^m\) or ideal permselective BC; outputs required.
+   - B1: specify \(k\), \(A\), \(P_s\) (or equivalent) and compute CP/rejection/flux relations.
+
+2) **Collect “parameter provenance” for each field (one line each):**
+   - Electrochemistry: provide one dataset for \(t_+^0(c)\) and \(\chi(c)\) for a named electrolyte and method.
+   - Membranes: provide \(X\), \(\alpha\) vs concentration range, and when \(\alpha\approx 2t_+^m-1\) holds.
+   - Biology: pick one named channel dataset with \(g\), \(P_K/P_{Na}\), conditions.
+   - Iontronics: provide \(C^*\) and \(D_\text{ion}\) with extraction method and a criterion for “reversible capacitive regime.”
+
+3) **Prepare standardized reporting tables (one per field) for the next meeting.**  
+   Include closures, selectivity metrics (partition + transport + optional coupling), limiting criterion + number, and one falsifiable scaling prediction.
+
+4) **Decide on Benchmark A2 (nanopore) only after A1 is completed.**  
+   This prevents underdetermined modeling debates and ensures we first validate cross-field alignment on the simplest falsifiable case.
+
+5) **Create a shared “dictionary” document (living):**
+   - Map: Donnan potential ↔ partitioning term in \(\mu^{ex}\); permselectivity \(\alpha\) ↔ \(t_+^m\); access resistance ↔ diffusion boundary layer; volumetric capacitance \(C^*\) ↔ storage term \(R_i\)/state variable.
+   - For each analogy, explicitly list where it holds and where it breaks (e.g., convection meaningless in single-file Å pores; electroneutrality fails near depletion/overlimiting).
+
+This closes Round 1/2 with a concrete path to a unified, testable framework rather than a purely conceptual synthesis.
+
+[end summary 1]
+
+[begin summary 2]
+
+### Agenda
+Rigorously test whether the apparent similarities among electrochemistry, membrane science, biological ion transport, and iontronics are **deep (shared governing structure)** or **superficial (terminology-level)** by:
+1) validating/refining the proposed common equations and closures,  
+2) stress-testing five specific cross-field analogies (where they hold and break),  
+3) anchoring comparisons with **quantitative length/time/flux/energy scales**, and  
+4) converging on a **minimal common model** plus discriminating dimensionless numbers/regime criteria.
+
+---
+
+### Team Member Input
+
+#### Electrochemistry Scientist
+**Assumptions (explicit):** continuum transport; typically electroneutral bulk; isothermal; negligible convection in separators; double layers thin vs pores except under extreme depletion/nanoconfinement; concentrated-solution thermodynamics often required.
+
+**Unifying equation stance:** agrees with electrochemical-potential-driven transport but warns dilute Nernst–Planck is often quantitatively wrong at ~1 M; prefers **Onsager/Stefan–Maxwell/Newman** closure.
+
+**Analogy testing**
+- **Most valid:** (2) CP/boundary layer/access limitation. Shared scaling \(i_{\lim}\sim zFDc_b/\delta\) (geometry-dependent prefactors).
+- **Most misleading:** (4) overpotential ↔ membrane potential ↔ action potential.  
+  *Wrong prediction:* treating action potential or iontronic switching as a memoryless Butler–Volmer-like element yields no threshold/refractory dynamics and no state dependence; for iontronics, predicts no thickness dependence vs observed \(\tau\propto L^2\) (×10 thickness → ×100 time).
+
+**Quantitative anchors**
+- Battery-like lengths: separator/electrode \(L\sim 25–100\,\mu\text{m}\).
+- Times: salt redistribution \(\tau\sim L^2/D_{\text{eff}}\) → seconds (separator) to ~100 s (100 µm electrode) with \(D_{\text{eff}}\sim 10^{-10}\,\text{m}^2/\text{s}\).
+- Current densities: \(i\sim 1–10\,\text{mA/cm}^2\) typical; flux \(N\sim i/F\).
+- Dimensionless discriminator: \(\Pi=i/i_{\lim}\) with \(\Pi\gtrsim 1\) indicating strong depletion/transport limitation.
+
+**Minimal \(\mu^{ex}\) closure:** represent non-ideality via activity coefficient \(\gamma_\pm\) and **thermodynamic factor** \(\chi(c)=1+\partial\ln\gamma_\pm/\partial\ln c\).
+
+**Parameter provenance/uncertainty (important):**
+- \(\kappa(c)\) typically ±2–5% if controlled.
+- \(D(c)\) often ±10–30% and definition-dependent (self vs chemical diffusion).
+- \(t_+^0\) method-dependent variability ±0.05–0.15 absolute.
+- \(\chi\) often ±20–50% unless carefully measured.
+- Warned against mixing inconsistent datasets; suggested either a single self-consistent dataset or a sensitivity study with uncertainty propagation.
+
+---
+
+#### Membrane Science Expert
+**Assumptions (explicit):** for IEM/ED: electroneutral membrane bulk with fixed charge \(X\); Donnan partitioning at interfaces; CP in external diffusion layers; Poisson/space charge needed in depletion/nanopores/overlimiting regimes; convection important in NF/RO but not central here.
+
+**Unifying equation stance:** agrees with electrochemical potential gradient framework; emphasizes Donnan is a **thermodynamic partition jump**, not a resolved diffuse double layer.
+
+**Analogy testing**
+- **Most valid:** (2) CP ↔ boundary layer ↔ access limitation; same mass-transfer-limited structure.
+- **Most misleading (mechanistically):** (1) double layer ↔ Donnan ↔ selectivity filter.  
+  *Wrong prediction:* treating Donnan as double-layer screening leads to wrong salinity dependence and wrong mechanism for Å-scale selectivity; Donnan-like mechanisms typically yield only a few \(k_BT\) discrimination in hydrated polymers, insufficient for \(10^3–10^4\) same-sign selectivity.
+
+**Quantitative anchors**
+- Lengths: membrane \(L_m\sim 100\,\mu\text{m}\); boundary layer \(\delta\sim 50–200\,\mu\text{m}\).
+- Times: \(\tau_\delta\sim 10\,\text{s}\) (100 µm, \(D=10^{-9}\)); \(\tau_m\sim 100\,\text{s}\) (100 µm, \(D_m=10^{-10}\)).
+- Limiting current example: \(c_b=10\,\text{mM}\), \(\delta=100\,\mu\text{m}\) → \(i_{\lim}\approx 0.96\,\text{mA/cm}^2\).
+- Energy scale: Donnan co-ion exclusion often ~2–5 \(k_BT\) (e.g., 10× → 2.3 \(k_BT\); 100× → 4.6 \(k_BT\)).
+
+**Dimensionless discriminators**
+- Primary: \(\Xi=X/c_b\) with \(\Xi\gg 1\) strong permselectivity; \(\Xi\lesssim 1\) co-ion leakage.
+- Also defined a pore-scale **Dukhin number** \(\mathrm{Du}=K_s/(K_b a)\) with \(\mathrm{Du}\gtrsim 1\) indicating surface conduction relevance (overlimiting).
+
+**Parameter provenance/uncertainty**
+- \(X\) must be defined per **membrane water phase**; water uptake variability ±10–30% → \(X\) uncertainty ±15–35%.
+- \(D_i^m\) often uncertain by ~factor 2 across methods.
+- \(\delta\) often ±20–50% unless hydrodynamics are well characterized.
+
+---
+
+#### Biological Ion Transport Scientist
+**Assumptions (explicit):** Å–nm selectivity filters; partial dehydration; multi-ion occupancy; correlations; permeation often quasi-steady within gating states; continuum PNP/GHK can be qualitative but often fails quantitatively in filters.
+
+**Unifying equation stance:** accepts electrochemical potential gradient as backbone but insists biology often requires **discrete-state (Markov/occupancy) kinetics**; \(\mu^{ex}\) is structured (coordination/dehydration/correlation), not a smooth mean-field term.
+
+**Analogy testing**
+- **Most valid:** (2) access limitation analogy via \(R_{\text{access}}\approx 1/(4a\kappa)\).
+- **Most misleading (mechanistically):** (1) double layer ↔ Donnan ↔ selectivity filter.  
+  *Wrong prediction (quantified):* Donnan/mean-field with weak ion-specificity predicts \(P_K/P_{Na}\sim 1–10\) (1–2 \(k_BT\) → 2.7–7.4×), whereas channels show \(10^3–10^4\) (2–4 orders mismatch). Also predicts monotonic dependence on fixed charge; real selectivity collapses with Å-scale ligand/geometry changes at near-constant net charge.
+
+**Quantitative anchors**
+- Lengths: filter ~1 nm long; radius ~0.15–0.2 nm (single-file).
+- Times: permeation ~10 ns/ion (10 pA → \(6\times 10^7\) ions/s); gating ~0.1–10 ms.
+- Dimensionless discriminator: \(\Theta=\tau_{\text{gating}}/\tau_{\text{perm}}\sim 10^5–10^7\) (statefulness dominates macroscopic behavior).
+- Selectivity energy: \(P_K/P_{Na}=10^3\Rightarrow \Delta\Delta G\approx 7\,k_BT\).
+
+**Minimal \(\mu^{ex}\) closure:** discrete-state free energies with detailed balance; proposed an “A2-lite” saturable boundary operator \(J_i=J_{i,\max}c/(K_{m,i}+c)\) with placeholder values (e.g., \(J_{K,\max}\sim 10^{-16}\,\text{mol/s}\), \(K_{m,K}\sim 10\,\text{mM}\), \(K_{m,Na}\sim 1–10\,\text{M}\)).
+
+**Parameter provenance/uncertainty**
+- \(P_K/P_{Na}\) from reversal potentials (GHK fits), uncertainty often ±0.2–0.5 log units (×1.6–3).
+- Single-channel conductance uncertainty ±10–30%; gating times ±20–50% and condition-dependent.
+
+---
+
+#### Iontronics Scientist
+**Assumptions (explicit):** mixed ionic–electronic conductors; often quasi-electroneutral polymer bulk; reversible regime requires avoiding Faradaic reactions; volumetric charging dominates when \(\Gamma\gtrsim 1\); diffusion in polymer sets switching.
+
+**Unifying equation stance:** agrees with backbone but requires explicit **storage/state variable** \(q\) and coupling \(\sigma_e(q)\); otherwise memory/hysteresis is misattributed.
+
+**Analogy testing**
+- **Most valid:** (2) access limitation is shared, but iontronics adds a distinct bottleneck: finite-capacity host + moving doping front.
+- **Most misleading:** (4) overpotential analogy.  
+  *Wrong prediction (quantified):* interfacial EDL/overpotential-only model predicts \(\tau\) ~ independent of thickness; volumetric diffusion predicts \(\tau\sim L^2/D\). Thickness ×10 → time ×100 (two orders). Also predicts unique static \(I(V)\) rather than charge-controlled state dependence.
+
+**Quantitative anchors**
+- Typical OECT thickness \(L\sim 50–200\,\text{nm}\) (to µm); \(D_{\text{ion}}\sim 10^{-11}–10^{-10}\,\text{m}^2/\text{s}\).
+- Switching: 100 nm with \(10^{-11}\) → ~1 ms; 1 µm → ~0.1 s.
+- Volumetric capacitance \(C^*\sim 10–40\,\text{F/cm}^3\); charge density for 0.5 V step ~5–20 C/cm³ (equivalent ~50–200 mM monovalent ions).
+
+**Dimensionless discriminator:** \(\Gamma=C^*L/C_{dl}\) with \(\Gamma\gtrsim 1\) indicating volumetric charging; typical \(\Gamma\sim 3–10\) for 100 nm PEDOT:PSS in aqueous (noting ~4× uncertainty due to \(C^*\) and \(C_{dl}\) variability).
+
+**Minimal \(\mu^{ex}\) closure:** partition coefficient \(K_i\) (affinity) with \(\Delta\mu_i^{ex}=-RT\ln K_i\), plus optional state-dependent diffusivity \(D(\theta)\).
+
+**Parameter provenance/uncertainty**
+- \(C^*\): EIS/chrono methods; often ±2× across labs; ±20–30% within controlled conditions.
+- \(D_{\text{ion}}\): transient fits/EIS; ±2× fit uncertainty; can vary 10× with hydration/doping.
+- \(K_i\): uptake via ICP-MS/IC; ±10–30% with consistent protocols; condition-dependent.
+
+**Protocol suggestion:** add diagnostic tests: thickness scaling (\(\tau\propto L^2\)?) and charge-collapse (\(\Delta\sigma_e\) vs \(Q=\int I_G dt\)).
+
+---
+
+#### Scientific Critic
+**Core contributions**
+- Enforced falsifiability: “most misleading” must correspond to a **wrong prediction** (magnitude or scaling).
+- Flagged \(\mu^{ex}\) as a potential “junk drawer”; demanded minimal parameterizations per field (achieved in Round 2).
+- Demanded operational dimensionless numbers with thresholds (achieved: \(\Pi,\Xi,\Theta,\Gamma\)).
+- Warned about unit/reference traps: \(X\) per membrane water; \(C^*\) per swollen volume; \(t_+^0\) reference frame.
+- Recommended benchmark discipline: stage A1 (A1.0→A1.2) before adding iontronics/biology modules.
+- Proposed formalizing the **boundary-operator** concept as the unifying architecture and writing “module contracts” (inputs/outputs/state variables/measurement proxies).
+- Requested A1.2 either use a single self-consistent dataset or be explicitly a sensitivity study.
+
+---
+
+### Recommendation
+**Adopt a “Minimal Common Model + Module Contracts” framework, anchored by Benchmark A1 staged (A1.0→A1.2), and explicitly classify analogies into “deep” vs “high-risk.”**
+
+Concretely:
+
+1) **Minimal common model (mandatory backbone):**  
+Assume isothermal continuum transport in the bulk regions (reservoir + diffusion layer), with explicit declaration of electroneutrality vs Poisson. Use:
+\[
+\partial_t c_i+\nabla\cdot \mathbf{J}_i = R_i
+\]
+\[
+\mathbf{J} = -\mathbf{L}\nabla \boldsymbol{\mu} + c\,\mathbf{u}
+\quad\text{(Onsager/Stefan–Maxwell umbrella)}
+\]
+\[
+\mu_i=\mu_i^0+RT\ln a_i+z_iF\phi+\mu_i^{ex}
+\]
+This is the simplest statement that remains predictive across concentrated electrolytes, membranes, and can host biology/iontronics via boundary modules.
+
+2) **Unifying architecture:** treat field-specific physics primarily as a **boundary operator + state evolution**:
+\[
+J_i(0,t)=\mathcal{F}_i\big(c(0,t),\phi(0,t),\text{state}(t)\big)
+\]
+- Membranes: Donnan + fixed charge \(X\) + in-membrane transport.
+- Electrochemistry: reaction/interphase kinetics and/or concentrated-solution closure.
+- Biology: occupancy/Markov filter module (later).
+- Iontronics: partition + diffusion into finite-capacity film + \(q\) state (later).
+
+3) **Benchmark plan (actionable and disciplined):**
+- **A1.0:** dilute, electroneutral, planar diffusion layer, ideal permselective BC.
+- **A1.1:** finite permselectivity via fixed-charge membrane (Donnan + \(X\), electroneutral membrane bulk) *or* equivalent leakage BC.
+- **A1.2:** concentrated-solution electrochemistry closure with \(\kappa(c),D(c),t_+^0(c),\chi(c)\).  
+  **Decision:** until a single vetted dataset is selected, treat A1.2 as a **sensitivity study with uncertainty propagation** (this avoids false precision and respects the current provenance gaps).
+
+4) **Analogy classification (final):**
+- Declare analogy **(2)** as “deep/unifying.”
+- Declare analogies **(1)** and **(4)** as “high-risk” with explicit failure modes and diagnostic tests.
+- Keep (3) and (5) as “conditionally useful” but not equivalences.
+
+**Justification:** This recommendation preserves the genuine shared physics (electrochemical potential gradients + conservation + access limitation) while preventing category errors (Donnan vs double layer vs filter; overpotential vs membrane/action potentials). It also yields a concrete deliverable: a staged benchmark and a modular dictionary that can be extended without derailing comparability.
+
+---
+
+### Answers
+
+#### 1) Which proposed analogy between fields is most valid, and which is most misleading?
+**Answer:**  
+- **Most valid:** **(2) Concentration polarization ↔ boundary layer ↔ channel mouth depletion (access limitation).**  
+- **Most misleading:** **(1) Double layer ↔ Donnan layer ↔ ion channel selectivity filter** (mechanistically), with (4) flagged as a close second “high-risk” analogy (definition/dynamics).
+
+**Justification:**  
+(2) was supported by shared governing structure and quantitative scalings across all fields (e.g., \(i_{\lim}\sim zFDc_b/\delta\) and \(R_{\text{access}}\sim 1/(4a\kappa)\)).  
+(1) produces **2–4 orders-of-magnitude wrong predictions** for same-sign selectivity (Donnan/weak partition predicts \(P_K/P_{Na}\sim 1–10\) vs observed \(10^3–10^4\)) and imports incorrect design levers (screening/fixed charge) into Å-scale coordination/correlation physics.  
+(4) is also misleading because it conflates potential definitions and fails qualitatively for threshold/refractory dynamics and iontronic state dependence; we therefore label it “high-risk,” but (1) is the most misleading in terms of mechanistic transfer and magnitude error in selectivity.
+
+---
+
+#### 2) What is the simplest mathematical statement that captures ion transport across ALL fields?
+**Answer:**  
+Ion transport is governed by **conservation** and **flux driven by electrochemical potential gradients**, most generally written as:
+\[
+\partial_t c_i+\nabla\cdot \mathbf{J}_i=R_i,\qquad 
+\mathbf{J}=-\mathbf{L}\nabla \boldsymbol{\mu}+c\,\mathbf{u},
+\qquad
+\mu_i=\mu_i^0+RT\ln a_i+z_iF\phi+\mu_i^{ex}.
+\]
+
+**Justification:**  
+This statement is broad enough to include dilute NP, concentrated-solution (Stefan–Maxwell/Newman), membrane Donnan/fixed-charge models, and can host biology (discrete-state \(\mu^{ex}\)/rates) and iontronics (storage via \(R_i\) and state variables). The differences across fields are primarily in closures for \(a_i\), \(\mu_i^{ex}\), electrostatics (Poisson vs electroneutrality), convection \(\mathbf{u}\), and the boundary operator \(\mathcal{F}\).
+
+---
+
+#### 3) What dimensionless numbers or length/time scales distinguish your field from others?
+**Answer:**  
+A minimal cross-field discriminator set (with thresholds) is:
+
+- **Electrochemistry (porous electrodes/separators):**  
+  \[
+  \Pi=\frac{i}{i_{\lim}}\approx \frac{i\,\delta}{zFDc_b},\quad \Pi\gtrsim 1 \Rightarrow \text{strong depletion/transport-limited}.
+  \]
+  Typical lengths \(25–100\,\mu\text{m}\); times seconds–100 s.
+
+- **Membranes (IEM/ED):**  
+  \[
+  \Xi=\frac{X}{c_b},\quad \Xi\gg 1 \Rightarrow \text{high permselectivity},\ \Xi\lesssim 1 \Rightarrow \text{co-ion leakage}.
+  \]
+  Typical \(L_m\sim 100\,\mu\text{m}\), \(\delta\sim 50–200\,\mu\text{m}\); times 10–100 s.  
+  Overlimiting discriminator (when relevant): \(\mathrm{Du}\gtrsim 1\) (surface conduction significant).
+
+- **Biology (channels):**  
+  \[
+  \Theta=\frac{\tau_{\text{gating}}}{\tau_{\text{perm}}}\sim 10^5–10^7,\quad \Theta\gg 1 \Rightarrow \text{state occupancy dominates macroscopic current}.
+  \]
+  Lengths Å–nm; permeation ns; gating ms; selectivity energies often \(\gtrsim 5–10\,k_BT\).
+
+- **Iontronics (OECT/memristive polymers):**  
+  \[
+  \Gamma=\frac{C^*L}{C_{dl}},\quad \Gamma\gtrsim 1 \Rightarrow \text{volumetric charging dominates (storage + diffusion)}.
+  \]
+  Typical \(L\sim 50–200\,\text{nm}\) (to µm); \(\tau\sim L^2/D\) (ms–0.1 s); strong hydration dependence.
+
+**Justification:**  
+These numbers directly encode the dominant bottleneck in each field: access limitation (\(\Pi\)), fixed-charge selectivity strength (\(\Xi\)), statefulness via gating (\(\Theta\)), and volumetric storage vs interfacial charging (\(\Gamma\)). They are operational (measurable) and come with regime thresholds.
+
+---
+
+### Next Steps
+
+1) **Write the “Minimal Common Model + Module Contract” document (1–2 pages):**
+   - Core equations (continuity + Onsager/SM + electrochemical potentials).
+   - Explicit closure checklist: \(a_i\), \(\mu^{ex}\), Poisson vs electroneutrality, \(\mathbf{u}\), \(R_i\).
+   - Boundary-operator interface \(J_i=\mathcal{F}_i(\cdot)\) and state variables.
+
+2) **Freeze Benchmark A1 protocol (A1.0–A1.2) as a one-page spec:**
+   - Geometry, \(c_b\) cases, \(\delta\), driving mode (imposed current), outputs required.
+   - A1.1 membrane parameter definitions (including \(X\) per membrane water phase).
+   - A1.2 declared as **sensitivity study** until a single self-consistent dataset is selected.
+
+3) **Standardized reporting table (mandatory, with units/reference states):**
+   - Electrochemistry: \(\kappa(c),D(c),t_+^0(c),\chi(c)\) + method + uncertainty + reference frame.
+   - Membranes: \(X\) (water-phase), water uptake, \(D_i^m\), \(L_m\), \(\delta\) + uncertainties.
+   - Biology: \(P_K/P_{Na}\), \(g\), gating times, conditions + uncertainty.
+   - Iontronics: \(C^*\) (swollen), \(D_{\text{ion}}\), \(K_i\), stability criteria + uncertainty.
+
+4) **Add diagnostic falsification tests to the protocol (cross-field):**
+   - CP test: \(i_{\lim}\propto c_b/\delta\) and flow dependence (if applicable).
+   - Iontronics test: \(\tau\propto L^2\) thickness scaling; \(\Delta\sigma_e\) collapse vs \(Q=\int I_G dt\).
+   - Biology selectivity test (later module): required \(\Delta\Delta G\) in \(k_BT\) for same-sign selectivity.
+
+5) **Decide on A1.2 dataset policy by next meeting:**
+   - Either approve literature lookup and select one internally consistent dataset, or keep A1.2 as uncertainty-bounded sensitivity until data are curated.
+
+6) **Defer A2-lite implementation but define its interface now:**
+   - Specify the biology filter module boundary condition form and required parameters so it can be plugged into the A1 solver later without redesign.
+
+This closes Round 2 with a validated deep analogy (access limitation), two explicitly “high-risk” analogies with quantified failure modes, a minimal common mathematical backbone, and a staged benchmark plan that is falsifiable and extensible.
+
+[end summary 2]
+
+Here is the agenda for the meeting:
+
+
+ROUND 3: Build a Unified Framework and Identify Field-Specific Extensions
+
+Objective: Agree on a common theoretical core and clearly define how each field extends it.
+
+The Chair will present a draft "unified framework" based on Rounds 1-2.
+
+Each expert will:
+
+A. VALIDATE OR CHALLENGE THE FRAMEWORK
+   - Does it correctly represent your field?
+   - Are the equations correct and general enough?
+   - What essential features are missing?
+
+B. DEFINE YOUR FIELD'S "BOUNDARY CONDITIONS"
+   - Given the common core equations, what makes your field unique?
+   - Example: "Electrochemistry adds Butler-Volmer at interfaces"
+   - Example: "Membranes add Donnan partitioning at interfaces"
+   - Be explicit: these are ADD-ONS to the common core, not contradictions
+
+C. MAP TERMINOLOGY
+   Create a translation table:
+   - Your field's term → Common framework term
+   - Example: "Transference number" (electrochem) = "Transport number" (general)
+   - Example: "Permselectivity" (membranes) = "Selectivity" (general)
+
+D. IDENTIFY KNOWLEDGE GAPS
+   - What experiments or simulations from other fields could inform yours?
+   - What measurements are routinely done in one field but not others?
+   - Could techniques from one field solve problems in another?
+
+After each expert, the Critic assesses whether the framework truly unifies or just relabels.
+
+FINAL SYNTHESIS:
+The Chair will produce:
+1. A concise statement of the unified framework (< 200 words)
+2. A table mapping field-specific terms to common concepts
+3. A list of 3-5 testable predictions or cross-field experiments
+
+
+Here are the agenda questions that must be answered:
+
+1. Does the proposed unified framework correctly describe your field? If not, what is missing?
+
+2. What is the key 'boundary condition' or interface physics that makes your field unique?
+
+3. What terminology from your field should be adopted vs. replaced in the unified framework?
+
+Here are the agenda rules that must be followed:
+
+1. Clearly state assumptions before presenting equations or models
+
+2. Provide quantitative estimates whenever possible (numbers, not just trends)
+
+3. Distinguish between established facts, likely hypotheses, and speculation
+
+4. Define technical jargon when first used or translate to common language
+
+5. Acknowledge the limits of your expertise and defer to other experts appropriately
+
+6. Support claims with specific examples, data, or literature references
+
+7. When making analogies, explicitly state where they hold and where they break down
+
+Symposium Chair and PI will convene the meeting. Then, each team member will provide their thoughts on the discussion one-by-one in the order above. After all team members have given their input, Symposium Chair and PI will synthesize the points raised by each team member, make decisions regarding the agenda based on team member input, and ask follow-up questions to gather more information and feedback about how to better address the agenda. This will continue for 4 rounds. Once the discussion is complete, Symposium Chair and PI will summarize the meeting in detail for future discussions, provide a specific recommendation regarding the agenda, and answer the agenda questions (if any) based on the discussion while strictly adhering to the agenda rules (if any).
+
+## User
+
+Symposium Chair and PI, please provide your initial thoughts on the agenda as well as any questions you have to guide the discussion among the team members.
+
+## Symposium Chair and PI
+
+We will run Round 3 as a “core + modules” design review. The goal is not to prove everyone uses the same equation; it’s to agree on (i) a minimal **common core** that is mathematically well-posed and falsifiable, and (ii) a small set of **field-specific boundary operators/state variables** that extend the core without changing its meaning.
+
+## 1) Draft unified framework (for validation)
+### Assumptions (explicit, default for Benchmark A1.x)
+- Isothermal, continuum description in the **bulk regions** (reservoir + diffusion layer).
+- Binary 1:1 electrolyte unless stated otherwise.
+- No convection in A1 (we will add it later for NF/RO).
+- Electrostatics: **electroneutral bulk** by default; Poisson only when a stated criterion is met (to be agreed).
+
+### Core equations (common backbone)
+For each ionic species \(i\):
+\[
+\partial_t c_i+\nabla\cdot \mathbf{J}_i = R_i
+\]
+\[
+\mathbf{J} = -\mathbf{L}(c,\text{state})\,\nabla \boldsymbol{\mu} \;+\; c\,\mathbf{u}
+\]
+\[
+\mu_i=\mu_i^0+RT\ln a_i(c)+z_iF\phi+\mu_i^{ex}(c,\text{state})
+\]
+- Here \(\mathbf{L}\) is an Onsager/Stefan–Maxwell mobility matrix (dilute NP is a special case).
+- “state” is optional but allowed (e.g., polymer doping level, channel occupancy, membrane hydration).
+
+### Unifying architecture: boundary operator + state evolution
+All field-specific physics is encoded as:
+\[
+\big\{\mathbf{J}_i(0,t),\; \text{state}(t)\big\}
+=
+\mathcal{B}\Big(c(0,t),\phi(0,t),\{\mu_i\}, i(t), \text{state}(t)\Big)
+\]
+This is the “module contract”: the bulk solver hands the interface module local concentrations/potentials; the module returns fluxes (and possibly state updates).
+
+**Quantitative anchor (A1):** limiting current scaling in the diffusion layer
+\[
+i_{\lim}\sim zF\frac{Dc_b}{\delta}
+\]
+Example: \(D=10^{-9}\,\mathrm{m^2/s}\), \(c_b=10\,\mathrm{mM}\), \(\delta=100\,\mu\mathrm{m}\) gives \(i_{\lim}\approx 1\,\mathrm{mA/cm^2}\) (order-of-magnitude check).
+
+What I want you to challenge: *Is this core too broad to be predictive? Or too narrow to represent your field without distortion?* If too broad, tell us what must be frozen (closures, reference frames). If too narrow, tell us what variable is missing (e.g., pressure, occupancy, electron carriers).
+
+---
+
+## 2) What I need from each expert (deliverables in your turn)
+Please structure your input as:
+
+1) **Validate/challenge** the core (with assumptions stated).
+2) Your **unique boundary condition / interface physics** as a module: inputs → outputs → parameters → typical magnitudes.
+3) **Terminology mapping**: 5–10 key terms (your term → common term).
+4) **Knowledge gaps**: one measurement from another field you want to import; one you can export.
+
+---
+
+## 3) Guiding questions (probing, to keep us falsifiable)
+
+### A. Closures: what exactly is inside \(\mu^{ex}\) vs \(a_i\) vs \(\mathbf{L}\)?
+1) In your field, what is the *minimal* non-ideality closure you consider “established” (not speculative)?
+   - Example targets: \(\chi(c)\) (electrochem), Donnan partition with \(X\) (membranes), discrete free energies (biology), partition \(K_i\)+state-dependent \(D\) (iontronics).
+2) Give one number: at what concentration/ionic strength does dilute NP become quantitatively wrong for your typical system (e.g., error >20%)?
+
+### B. Electrostatics: when does electroneutrality break?
+3) Provide a criterion you actually use (or would accept) for “Poisson required.” Options to debate:
+   - \(\lambda_D/a\) not small (nanopores),
+   - \(\Pi=i/i_{\lim}\gtrsim 1\) (strong depletion),
+   - \(\mathrm{Du}\gtrsim 1\) (surface conduction),
+   - fast transients (iontronics).
+4) Give a representative Debye length number for your typical conditions (e.g., 10 mM → \(\lambda_D\sim 3\) nm; 100 mM → \(\sim 1\) nm) and compare to your characteristic pore/film length.
+
+### C. Boundary operator: what is the “interface” in your field?
+5) What is the correct “interface” object: a mathematical surface with jump conditions (Donnan), a finite-thickness layer (SEI, polymer film), or a discrete filter (channel)?
+6) What are the module’s state variables (if any), and what timescale separates “fast equilibration” from “slow evolution”?
+   - Please give one timescale estimate (ms, s, etc.) using your typical \(L\) and \(D\) or kinetic rate.
+
+### D. Selectivity taxonomy: partition vs transport vs kinetic/coupling
+7) Which selectivity metric is *primary* in your field, and which is often misused when imported from others?
+8) Provide one quantitative selectivity example in your native metric and translate it into an energy scale if possible (e.g., \(RT\ln\) ratio).
+
+### E. Regime maps: what breaks the analogy?
+9) Name one analogy from Rounds 1–2 you think is still “high-risk,” and give the *wrong prediction* it would make in your system (scaling or magnitude).
+
+---
+
+## 4) Decisions we must reach by end of today (so we don’t drift)
+1) **Core equation choice:** do we standardize on Onsager/Stefan–Maxwell form (umbrella) with NP as a special case, or do we write NP and allow “upgrades”? My bias: umbrella form, but we must keep it solvable.
+2) **A1.1 interface module definition:** pick one canonical finite-permselectivity boundary operator (e.g., fixed-charge Donnan + electroneutral membrane bulk) and define its parameter set unambiguously (including units/reference states).
+3) **A1.2 data policy:** confirm “sensitivity study until curated dataset” (likely) and define which parameters get uncertainty bands.
+4) **Common terminology table:** agree on a small controlled vocabulary (e.g., “transport number” as the umbrella; “permselectivity” as a membrane-specific observable).
+
+---
+
+## 5) Quick prompts to each team member (to prepare your turn)
+
+- **Electrochemistry Scientist:** For A1.2, what is your minimal parameter set \(\{\kappa(c), D(c), t_+^0(c), \chi(c)\}\) and what reference frame must be stated to avoid nonsense? Give typical uncertainty bands.
+- **Membrane Science Expert:** For A1.1, specify the Donnan/fixed-charge module as a boundary operator: what are the jump conditions and what is the minimal set \(\{X, D_i^m, L_m\}\)? Clarify “\(X\) per membrane water phase” with a numeric example.
+- **Biological Ion Transport Scientist:** Can you express your filter physics as a boundary operator compatible with A1 (e.g., saturable flux law or Markov module) and state when it reduces to an effective permeability? Provide one dataset anchor (channel, conditions).
+- **Iontronics Scientist:** Define the state variable (doping/charge \(q\)) and the coupling law \(\sigma_e(q)\). What diagnostic proves volumetric vs interfacial control (thickness scaling, charge-collapse)? Provide typical \(C^*\), \(D_{\text{ion}}\), and a timescale.
+- **Scientific Critic:** Your job is to test whether each module contract is (i) well-posed, (ii) measurable, and (iii) not a relabeling. Please flag any hidden assumptions, unit traps, or unfalsifiable \(\mu^{ex}\) usage.
+
+If everyone agrees, we’ll proceed in the stated order and I’ll enforce: assumptions → equations/module → one number → failure mode.
+
+## User
+
+Electrochemistry Scientist, please provide your thoughts on the discussion (round 1 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Electrochemistry Scientist
+
+## A) Validate / challenge the unified framework (from an electrochemistry standpoint)
+
+### Assumptions I’m adopting (so we’re precise)
+- Continuum transport in separator/electrolyte; isothermal.
+- No convection in porous separator (reasonable for batteries; \(\mathbf{u}\approx 0\)).
+- Bulk is **electroneutral** except possibly in extreme depletion or nm-scale confinement.
+- For “battery-like” electrolytes (0.5–2 M), **dilute Nernst–Planck is not quantitatively reliable**; we need a concentrated-solution closure (Stefan–Maxwell / Onsager / Newman).
+
+### Validation
+- The proposed backbone
+  \[
+  \partial_t c_i+\nabla\cdot \mathbf{J}_i=R_i,\quad \mathbf{J}=-\mathbf{L}\nabla\boldsymbol{\mu}
+  \]
+  is correct and general enough **provided** we explicitly define:
+  1) the **reference frame** for fluxes (solvent frame vs barycentric), and  
+  2) what we mean by “activity” \(a_i\) and thermodynamic factor \(\chi\) in the concentrated regime.
+
+### What’s missing / needs tightening (not contradictions)
+1) **Electroneutral closure + current relation** should be written explicitly for A1.x so different groups don’t implement inconsistent “NP variants.” In battery modeling we often solve for electrolyte potential \(\phi_e\) via a constitutive law for current:
+   \[
+   i_e = F\sum_i z_i J_i
+   \]
+   and then use a concentrated-solution constitutive relation (below). Without this, people will mix Poisson, electroneutrality, and arbitrary migration terms.
+
+2) **Concentrated-solution thermodynamics**: in 1 M carbonate electrolytes, the “extra physics” is not a small correction. A practical minimal closure is the Newman form:
+   \[
+   i_e=-\kappa(c)\nabla\phi_e+\frac{2RT\kappa(c)}{F}\,(1-t_+^0)\,\chi(c)\,\nabla\ln c
+   \]
+   plus salt conservation with an effective diffusivity \(D_\text{eff}(c)\). This is the electrochemistry “module” for bulk transport (not just boundary).
+
+3) **Parameter provenance discipline** must be part of the framework, otherwise A1.2 becomes non-falsifiable: \(t_+^0\), \(\chi\), \(D\), \(\kappa\) are not independent if taken from inconsistent sources.
+
+**Quantitative anchor:** dilute NP starts to be “dangerously wrong” for typical LiPF\(_6\) in EC/EMC already by ~0.5–1 M; errors in predicted concentration overpotential can easily exceed **tens of mV** at \(i\sim 5–10\) mA/cm\(^2\) across \(L\sim 50–100\,\mu\)m because \(\chi(c)\) and \(t_+^0(c)\) strongly shape \(\nabla c\) and \(\nabla\phi_e\). (Established in the battery modeling literature; exact magnitude depends on dataset.)
+
+---
+
+## B) Electrochemistry “boundary condition / interface physics” module
+
+Electrochemistry is unique in that **interfaces are reactive** and often have a **finite-thickness interphase** (SEI/CEI) that conducts ions but blocks electrons.
+
+### Module 1: Faradaic charge-transfer kinetics (established)
+At an electrode/electrolyte interface:
+\[
+j = j_0(c,T)\left[\exp\!\left(\frac{\alpha_a F\eta}{RT}\right)-\exp\!\left(-\frac{\alpha_c F\eta}{RT}\right)\right]
+\]
+- \(j\) is interfacial current density (A/m\(^2\))
+- \(\eta=\phi_s-\phi_e-U(c)\) is overpotential (solid minus electrolyte potential minus equilibrium potential)
+- \(j_0\) depends on local concentrations (and activities in concentrated form)
+
+**Typical numbers:** in Li-ion porous electrodes, effective interfacial \(j_0\) (area-normalized to true surface area) can be ~0.1–10 A/m\(^2\) depending on chemistry/state; translating to geometric current depends on surface area density \(a_s\sim 10^5–10^6\) m\(^2\)/m\(^3\). This is why kinetics can be fast yet still compete with transport at high rates.
+
+### Module 2: Interphase (SEI) transport (partly established, partly uncertain)
+Often represented as an ohmic film:
+\[
+\Delta\phi_\text{SEI} = j\,R_\text{SEI},\quad R_\text{SEI}=\frac{L_\text{SEI}}{\kappa_\text{SEI}}
+\]
+**Typical order:** \(R_\text{SEI}\) on the order of **1–50 \(\Omega\cdot\)cm\(^2\)** is common in fits; \(L_\text{SEI}\sim 5–50\) nm. The mapping to \(\kappa_\text{SEI}\) is uncertain because SEI is heterogeneous (this is a knowledge gap).
+
+### How this fits the “boundary operator” concept
+Inputs: \(c(0,t)\), \(\phi_e(0,t)\), \(\phi_s(0,t)\), \(T\), state-of-charge (via \(U\)).  
+Outputs: \(j(t)\) and species source terms \(R_i\) at the boundary (stoichiometry).  
+State variables (optional): SEI thickness \(L_\text{SEI}(t)\), active area loss, etc.
+
+---
+
+## C) Terminology mapping (electrochem → common framework)
+
+| Electrochemistry term | Common framework term |
+|---|---|
+| Transference number \(t_+^0\) (solvent frame) | Transport number (must specify reference frame) |
+| Concentration overpotential | Potential drop due to \(\nabla \mu\) (thermodynamic + transport contribution) |
+| Electrolyte conductivity \(\kappa\) | Bulk transport coefficient in \(\mathbf{L}\) (charge–potential coupling) |
+| Thermodynamic factor \(\chi\) | Non-ideality closure: \(\partial \mu/\partial \ln c\) |
+| Butler–Volmer kinetics | Reactive boundary operator \(\mathcal{B}\) (Faradaic) |
+| SEI resistance | Interphase transport element (finite-thickness boundary layer) |
+| Limiting current \(i_\text{lim}\) | Mass-transfer-limited current (boundary-layer supply limit) |
+
+**Term I’d like adopted (not replaced):** *thermodynamic factor* \(\chi\). It’s a clean, measurable way to keep \(\mu^{ex}\) from becoming a “junk drawer.”  
+**Term I’d like replaced/qualified:** “transference number” without a frame. Always state **\(t_+^0\) (solvent frame)** or equivalent.
+
+---
+
+## D) Knowledge gaps / cross-field imports
+
+### What I want to import (from membranes / biology / iontronics)
+1) **Better treatment of fixed charge / surface charge effects** under depletion (membrane science): criteria for when surface conduction or space charge matters (Du-based regime maps) could help battery separators with functional coatings or charged binders.
+2) **Access resistance formalism** (biology): for nanoscale pores in SEI or porous carbon, the \(R_\text{access}\sim 1/(4a\kappa)\) concept is a useful “sanity bound” on achievable currents.
+3) **State-variable discipline** (iontronics): explicit “charge stored” \(q\) as a state variable could clarify when we are fitting pseudocapacitance vs true Faradaic insertion in some battery interphases.
+
+### What electrochemistry can export
+- **Transference number measurement rigor** (eNMR/Hittorf/polarization with artifact analysis) to any field using “selective transport” claims.
+- **EIS-based separation of bulk vs interfacial resistances** (with caveats) as a standardized diagnostic across modules.
+
+---
+
+## One polite disagreement / caution
+Treating “field-specific physics primarily as a boundary operator” is powerful, but in electrochemistry **the bulk closure is itself field-specific** in concentrated electrolytes. If we relegate concentrated-solution effects to a boundary module, we will mispredict A1.2 even with perfect interface conditions. So: boundary operators are essential, but **A1.2 must also upgrade the bulk \(\mathbf{L}(c)\) and \(\mu(c)\)** consistently.
+
+That’s all for Round 1.
+
+## User
+
+Membrane Science Expert, please provide your thoughts on the discussion (round 1 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Membrane Science Expert
+
+## A) Validate / challenge the unified framework (membrane science view)
+
+### Assumptions I’m adopting (so we don’t talk past each other)
+- Continuum transport in aqueous phase; isothermal.
+- For **IEM/ED** focus (A1.0–A1.1): no convection in the diffusion layers; steady or quasi-steady.
+- **Electroneutrality in the membrane bulk** is usually an excellent approximation for swollen IEMs (thickness \(L_m\sim 50–200\,\mu\)m) except near extreme depletion/overlimiting.
+- Interfaces are treated as **thermodynamic partitioning planes** (Donnan), not resolved diffuse double layers.
+
+### Validation
+The “core + boundary operator” framework is correct and maps cleanly onto membrane science **if** we explicitly separate:
+1) **Partition selectivity** (equilibrium jump at interface) from  
+2) **Transport selectivity** (different mobilities inside membrane + co-ion leakage) from  
+3) **External mass transfer** (diffusion boundary layers causing CP and limiting current).
+
+That separation is the membrane scientist’s everyday mental model (series resistances + partitioning).
+
+### What is missing / needs to be explicit
+1) **Membrane is not just a boundary** in A1.1: it is a finite-thickness medium with its own electroneutral closure and transport coefficients. So I agree with the Electrochemistry Scientist’s caution: for A1.1, the “module” should include both (i) Donnan jumps and (ii) in-membrane transport across \(L_m\). Otherwise we can’t predict co-ion leakage, membrane potential, or ohmic drop.
+
+2) **Define fixed charge \(X\) unambiguously**: it must be per **membrane water phase** (mol/L of absorbed water), not per dry polymer. Water uptake variations of ±10–30% routinely translate into ±15–35% uncertainty in \(X\). If we don’t standardize this, cross-field comparisons will be meaningless.
+
+3) **State when Poisson is needed**: in IEMs, Poisson is usually not needed in the membrane bulk, but becomes relevant in:
+   - nm pores / thin films,
+   - strong depletion near limiting current (space-charge layer),
+   - overlimiting regimes (electroconvection/surface conduction/water splitting).
+We should encode this as a regime criterion (see below).
+
+**Quantitative anchor:** typical IEM parameters  
+- \(L_m \sim 100\,\mu\)m  
+- \(D_i^m \sim 10^{-11}–10^{-10}\,\mathrm{m^2/s}\) (often uncertain ~×2)  
+- boundary layer \(\delta \sim 50–200\,\mu\)m (often ±20–50% unless hydrodynamics are controlled)  
+- fixed charge (water phase) \(X \sim 0.5–2\) M for many commercial IEMs.
+
+---
+
+## B) Membrane field “boundary condition / interface physics” module
+
+### Unique interface physics (established): Donnan partitioning + electroneutral membrane bulk
+At each solution/membrane interface, we impose equality of electrochemical potentials (or an equivalent Donnan jump). For a 1:1 electrolyte with ideal activities as a starting point:
+
+**Electroneutrality in membrane water phase**
+\[
+c_+^m - c_-^m = X
+\]
+
+**Donnan equilibrium (idealized)**
+\[
+\mu_i^s = \mu_i^m \Rightarrow
+RT\ln c_i^s + z_iF\phi^s = RT\ln c_i^m + z_iF\phi^m
+\]
+so
+\[
+c_i^m = c_i^s \exp\!\left(-\frac{z_iF\Delta\phi_D}{RT}\right)
+\]
+with \(\Delta\phi_D=\phi^m-\phi^s\) determined by electroneutrality.
+
+For a symmetric 1:1 salt, this yields the classic co-ion exclusion relation:
+\[
+c_-^m = \frac{-X+\sqrt{X^2+4(c_s)^2}}{2}
+\]
+(anion is co-ion in a CEM).
+
+**Quantitative example (established, order-of-magnitude):**  
+Let \(X=1\) M (water phase), external \(c_s=0.1\) M:
+\[
+c_-^m \approx \frac{-1+\sqrt{1+0.04}}{2}\approx 0.01\ \text{M}
+\]
+So ~10× co-ion exclusion (≈2.3 \(k_BT\) partition energy). This is strong for desalination, but far weaker than biological same-sign selectivity (10³–10⁴).
+
+### In-membrane transport (established for IEMs)
+Within the membrane (electroneutral bulk), use Nernst–Planck or Onsager form with effective \(D_i^m\) and (optionally) activity corrections:
+\[
+J_i^m = -D_i^m\nabla c_i^m - \frac{z_iD_i^mF}{RT}c_i^m\nabla\phi^m
+\]
+(Convection negligible in dense IEMs; for NF we’d add hindrance + solvent flow, but that’s outside A1.1.)
+
+### What makes membranes unique vs electrochemistry interfaces
+- The “interface physics” is primarily **thermodynamic partitioning** (Donnan) plus a **fixed-charge constraint**; no electron-transfer kinetics.
+- The membrane is a **selective medium** with a built-in charge density \(X\), so it sets transport numbers internally.
+
+**Transport selectivity metric (established): permselectivity \(\alpha\)**
+Measured from membrane potential under a salinity gradient; relates approximately to membrane transport number for a binary electrolyte:
+\[
+\alpha \approx 2t_+^m - 1
+\]
+**Quantitative anchor:** \(\alpha=0.95 \Rightarrow t_+^m\approx 0.975\) (near-ideal CEM), but this mapping degrades with multicomponent feeds and non-idealities.
+
+### Regime discriminators (operational)
+- **Selectivity strength:** \(\Xi=X/c_b\).  
+  If \(c_b=10\) mM and \(X=1\) M, \(\Xi=100\) → strong permselectivity.  
+  If \(c_b=0.5\) M, \(\Xi=2\) → significant co-ion leakage expected.
+- **Overlimiting relevance:** Dukhin number \(\mathrm{Du}\gtrsim 1\) (surface conduction comparable to bulk in pores/channels), plus \(\Pi=i/i_{\lim}\gtrsim 1\) for depletion-driven space charge.
+
+---
+
+## C) Terminology mapping (membranes → common framework)
+
+| Membrane term | Common framework term |
+|---|---|
+| Fixed charge density \(X\) (water phase) | Built-in charge constraint / background charge in \(\mu^{ex}\) + electroneutral closure |
+| Donnan potential \(\Delta\phi_D\) | Interfacial partition potential (jump condition from \(\mu\) continuity) |
+| Co-ion exclusion | Partition selectivity (equilibrium) |
+| Permselectivity \(\alpha\) | Transport selectivity observable (maps to transport number in binary case) |
+| Membrane potential | Open-circuit potential difference from unequal ion transport/partition |
+| Concentration polarization (CP) | Boundary-layer depletion/enrichment (access limitation) |
+| Limiting current (ED) | Mass-transfer-limited current set by diffusion layer |
+
+**Terms I’d advocate adopting (not replacing):**
+- **Donnan equilibrium / Donnan exclusion** (because it precisely denotes a partition jump, not a diffuse double layer).
+- **Permselectivity** as a membrane-specific observable (but always label it as a transport selectivity metric under defined conditions).
+
+**Terms I’d caution against (need qualifiers):**
+- “Surface charge” used interchangeably with “fixed charge.” In IEMs, \(X\) is a **volume** charge density in the swollen phase; “surface charge” is a pore-scale concept and matters mainly in NF/nanopores.
+
+---
+
+## D) Knowledge gaps / cross-field imports
+
+### What I want to import
+1) From electrochemistry: **concentrated-solution parameterization discipline** (self-consistent \(\kappa(c), \chi(c), t_+(c)\) datasets + uncertainty propagation). Membrane modeling often still uses ideal assumptions where they fail at brackish-to-seawater ionic strengths.
+2) From biology: **free-energy language for ion-specificity**. Membranes increasingly pursue monovalent selectivity (e.g., Li⁺/Mg²⁺, K⁺/Na⁺), where Donnan + sterics is not enough; we need a controlled way to represent dehydration/coordination penalties (a structured \(\mu^{ex}\), not just “fit a selectivity coefficient”).
+3) From iontronics: **state-variable + swelling coupling**. Many membranes foul/swell; treating water uptake (and thus \(X\), \(D_i^m\)) as state-dependent could unify “aging/fouling” with iontronic doping-state ideas.
+
+### What membrane science can export
+- **Mass-transfer/CP diagnostics**: flow dependence of \(i_{\lim}\) and film-theory extraction of \(k\) or \(\delta\); this is directly portable to electrochemistry and iontronics when access limitation is suspected.
+- **Permselectivity measurement protocols** (membrane potential under controlled gradients) as a standardized way to quantify transport selectivity without invoking reactions.
+
+---
+
+## One polite disagreement / caution
+I agree with the Chair’s “boundary operator” architecture, but I want to prevent a common mistake: **Donnan is not a double layer model** and should not be implemented as “thin EDL screening.” It is a *partition equilibrium* arising from fixed charge and electroneutrality. The analogy to electrode double layers holds only at the level of “potential jump at an interface,” and breaks mechanistically (and in predicted ion-specificity).
+
+That’s my Round 1 input.
+
+## User
+
+Biological Ion Transport Scientist, please provide your thoughts on the discussion (round 1 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Biological Ion Transport Scientist
+
+## A) Validate / challenge the unified framework (biology / ion channels)
+
+### Assumptions I’m adopting (so the mapping is honest)
+- We are describing **permeation within a fixed gating state** (open state), i.e., quasi-steady permeation; gating is a slower state variable.
+- Channel selectivity filters are Å–nm scale; ions are **partially dehydrated** and interact with discrete ligands; multi-ion occupancy and correlations can dominate.
+- Continuum electrodiffusion (NP/PNP/GHK) can be used in **access regions** and sometimes in wider vestibules, but is often quantitatively wrong in the selectivity filter.
+
+### Validation
+The proposed backbone—flux driven by electrochemical potential gradients with conservation—is conceptually correct for biology **if** we allow \(\mu_i^{ex}\) to be *structured* (not a smooth mean-field correction) and if we explicitly permit **discrete-state kinetics** as a legitimate “closure” rather than an afterthought.
+
+Where it works well:
+- In the **bulk and access** regions: diffusion + migration with electroneutrality is fine.
+- As a unifying architecture: treating the channel as a **boundary operator** between two baths is exactly how electrophysiologists interpret reversal potentials and conductance.
+
+Where it breaks if taken too literally:
+- Inside Å-scale filters, writing \(\mathbf{J}=-\mathbf{L}\nabla\mu\) with local \(c(x)\) and a continuum dielectric can hide the real physics (dehydration, coordination geometry, ion–ion correlations). That’s not a contradiction—just a warning about what “\(\mu^{ex}\)” must contain.
+
+**Quantitative anchor (established):**
+- Typical single-channel current \(i\sim 1–20\) pA at 100 mV → \(6\times 10^6\) to \(1.2\times 10^8\) ions/s.
+- Selectivity: many K\(^+\) channels have \(P_K/P_{Na}\sim 10^3–10^4\). Energy scale:
+  \[
+  \Delta\Delta G \approx RT\ln(P_K/P_{Na}) \approx (2.5\,\mathrm{kJ/mol})\ln(10^3)\approx 17\,\mathrm{kJ/mol}\approx 7\,k_BT
+  \]
+  (Useful scale; mapping is approximate when multi-ion kinetics dominate.)
+
+---
+
+## B) Biology’s unique “boundary condition / interface physics” module
+
+Biology’s uniqueness is not “fixed charge” per se; it is **discrete binding/occupancy + knock-on conduction** in a narrow filter, plus **gating** as a separate state process.
+
+### Module 1 (permeation/selectivity filter): discrete-state occupancy kinetics (established as a modeling class; parameters often inferred)
+Represent the filter as a small set of occupancy states \(S_k\) (e.g., 0–3 ions in the filter), with voltage- and concentration-dependent transition rates \(k_{k\to k'}\). Flux is the net cycle current through the Markov network.
+
+- **Inputs:** bath concentrations \(c_L, c_R\), membrane voltage \(V\), ion identity \(i\), temperature.
+- **Outputs:** ionic flux \(J_i(V,c)\) (or current \(I_i=z_iFJ_i\)), and optionally state occupancies.
+- **Parameters:** state free energies \(G_k\) and barrier heights \(\Delta G^\ddagger\) (or rates), constrained by **detailed balance**.
+
+**Minimal “A2-lite” boundary operator (pragmatic for A1 integration):**
+If we need a plug-in operator without full Markov detail, use a saturable flux law per ion:
+\[
+J_i = J_{i,\max}\frac{c}{K_{m,i}+c}
+\]
+with strong ion dependence in \(K_{m,i}\) and/or \(J_{i,\max}\).
+
+**Representative placeholder magnitudes (hypothesis but plausible):**
+- For a K\(^+\)-selective filter: \(K_{m,K}\sim 1–30\) mM; \(K_{m,Na}\sim 0.5–5\) M (encodes ~\(10^2–10^3\) selectivity in occupancy).
+- \(J_{K,\max}\) corresponding to \(I_{\max}\sim 10\) pA gives:
+  \[
+  J_{\max}=\frac{I_{\max}}{F}\sim \frac{10\times 10^{-12}}{96485}\approx 1\times 10^{-16}\ \mathrm{mol/s}
+  \]
+This is a clean way to connect to the common framework without pretending the filter is continuum.
+
+### Module 2 (gating): state variable with slow kinetics (established)
+Gating is a separate Markov process (closed ↔ open ↔ inactivated) with timescales:
+- permeation: ns–µs per ion transit (fast)
+- gating: ~0.1–10 ms (slow)
+
+**Dimensionless discriminator (established conceptually, order-of-magnitude):**
+\[
+\Theta=\frac{\tau_{\text{gating}}}{\tau_{\text{perm}}}\sim 10^5–10^7
+\]
+So macroscopic currents are dominated by state occupancy (open probability), not just permeation physics.
+
+### Where analogies hold vs break
+- **Holds (deep):** access limitation ↔ diffusion boundary layer. The access resistance estimate
+  \[
+  R_{\text{access}}\approx \frac{1}{4a\kappa}
+  \]
+  gives an upper bound on current. For \(a=0.5\) nm, \(\kappa=1\) S/m → \(R\sim 5\times 10^8\,\Omega\), so at 100 mV, \(I\lesssim 200\) pA (order-of-magnitude ceiling).
+- **Breaks (high-risk):** Donnan/fixed-charge explanations of K\(^+\)/Na\(^+\) selectivity. Donnan-type partitioning typically yields only ~2–5 \(k_BT\) (10–100×) unless you add strong ion-specific \(\mu^{ex}\); real K\(^+\) channels achieve ~7–10 \(k_BT\) discrimination with near-constant net charge but Å-scale geometry changes.
+
+---
+
+## C) Terminology mapping (biology → common framework)
+
+| Biology term | Common framework term |
+|---|---|
+| Reversal potential \(E_{\text{rev}}\) | Zero-current potential (from \(\mu\) balance across interface) |
+| Permeability ratio \(P_K/P_{Na}\) | Transport selectivity metric (effective permeability under GHK assumptions) |
+| Selectivity filter | Interface module with structured \(\mu^{ex}\) / discrete occupancy states |
+| Knock-on conduction | Multi-ion correlated transport (non-mean-field contribution to \(\mathbf{L}\) / rates) |
+| Fast inactivation | Time-dependent boundary operator state (availability) |
+| Open probability \(P_o\) | State variable controlling effective conductance (gating module) |
+| Single-channel conductance \(g\) | Linear-response slope \(dI/dV\) in a given state |
+
+**Terms I’d advocate adopting:**
+- **“Selectivity filter”** as a specific kind of interface module where dehydration/coordination dominates.
+- **“Occupancy”** (number of ions in the filter) because it naturally explains saturation and multi-ion effects.
+
+**Terms I’d caution against importing unmodified:**
+- “Permselectivity” used for channels can confuse: channel selectivity is often **energetic/kinetic** (free-energy landscape + barriers), not just fixed-charge partitioning.
+
+---
+
+## D) Knowledge gaps / cross-field imports
+
+### What I want to import
+1) From membrane science: rigorous treatment of **concentration polarization** and boundary layers under imposed current. In patch clamp we often assume baths are well-stirred; for high-throughput platforms or nanopore devices, CP could matter and is underappreciated.
+2) From electrochemistry: **activity/thermodynamic factor** thinking. Many channel analyses assume ideal activities; at 100–500 mM salts, activity corrections can shift inferred permeability ratios and \(E_{\text{rev}}\) by several mV (small but not negligible when fitting selectivity).
+3) From iontronics: explicit **state-variable frameworks** for hysteresis/memory. This is conceptually aligned with gating/inactivation and could help unify “history dependence” language.
+
+### What biology can export
+- **Single-molecule conductance + noise analysis** (patch clamp) as a way to separate access limitation vs in-pore limitation (series resistance decomposition).
+- **Structure-function constraints**: Å-scale mutations that change selectivity by orders of magnitude at near-constant net charge are strong falsification tests for any “fixed charge only” model.
+
+---
+
+## One polite disagreement / caution
+I strongly support the unified backbone, but I want to prevent \(\mu^{ex}\) from becoming a “fit-anything” term. For biology, the minimal non-handwavy closure is: **discrete states with free energies and barriers constrained by detailed balance**. If we can’t do that in A1, then the saturable boundary operator is acceptable as a placeholder—but we should label it explicitly as a reduced model and not claim it is mechanistic.
+
+That’s my Round 1 input.
+
+## User
+
+Iontronics Scientist, please provide your thoughts on the discussion (round 1 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Iontronics Scientist
+
+## A) Validate / challenge the unified framework (iontronics / OECTs / ionic memristors)
+
+### Assumptions I’m adopting (so the mapping is precise)
+- Mixed ionic–electronic conductor (MIEC): ions move in an electrolyte/polymer; electronic carriers move in the polymer channel.
+- We focus on the **reversible capacitive (non-Faradaic) regime** unless explicitly stated; i.e., gate voltages within the electrochemical stability window and no net chemical conversion.
+- Polymer bulk is often treated as **quasi-electroneutral** (mobile ions compensate electronic charge), but **Poisson can matter** in fast transients, strong depletion, or very thin films.
+- Convection is negligible in the polymer; in the electrolyte it depends on geometry but is usually negligible in microfluidic OECT tests.
+
+### Validation
+The proposed backbone (continuity + flux driven by electrochemical potential gradients) is correct and general enough **only if** the framework explicitly includes:
+1) a **state variable** for stored ionic/electronic charge in the active material (call it \(q\) or \(\theta\)), and  
+2) a **coupling law** linking that state to electronic transport (e.g., \(\sigma_e(q)\) or \(n_e(q)\)).
+
+Without (1) and (2), the framework will incorrectly reduce iontronics to a memoryless electrolyte polarization problem and will miss hysteresis, synaptic plasticity analogs, and thickness-dependent switching.
+
+**Quantitative anchor (established):**
+- Volumetric capacitance \(C^*\sim 10–40\,\mathrm{F/cm^3}\) for common OECT polymers (e.g., PEDOT:PSS, glycolated polythiophenes; value depends strongly on hydration and morphology).
+- Ion diffusivity in polymer \(D_{\text{ion}}\sim 10^{-11}–10^{-10}\,\mathrm{m^2/s}\) (often ±2× fit uncertainty; can vary 10× with swelling/doping).
+- Switching time scaling (established in many OECT transient analyses):  
+  \[
+  \tau \sim \frac{L^2}{D_{\text{ion}}}
+  \]
+  Example: \(L=100\) nm, \(D=10^{-11}\) → \(\tau\sim 1\) ms; \(L=1\,\mu\)m → \(\tau\sim 0.1\) s.
+
+---
+
+## B) Iontronics “boundary condition / interface physics” module
+
+Iontronics is unique because the “interface” is often a **distributed volumetric interface**: ions enter a finite-capacity host and modulate electronic conduction throughout the volume (not just at a surface).
+
+### Module 1: Partition + volumetric charging (established as operating principle; parameter values system-dependent)
+At the electrolyte/polymer boundary, ions partition into the polymer with an affinity (partition coefficient \(K_i\)):
+\[
+c_i^{p}(0^+) = K_i\,c_i^{\text{elyte}}(0^-)
+\]
+This is analogous in form to Donnan/partitioning, but the physical origin can include polymer solvation, fixed charges, and specific interactions.
+
+**Typical magnitude:** \(K_i\) is often order 0.1–10 depending on ion/polymer; measured by uptake (ICP-MS/IC) with ~±10–30% uncertainty under controlled protocols. (Condition-dependent; not universal.)
+
+### Module 2: Finite-capacity storage + state evolution (essential; established phenomenology)
+Define a state variable \(q(x,t)\) (C/m³) or normalized occupancy \(\theta\) representing stored ionic charge in the polymer. In the simplest capacitive picture:
+\[
+q \approx C^*\,(\phi_p-\phi_{\text{elyte}})
+\]
+and conservation couples ionic flux to state change:
+\[
+\partial_t q = -\nabla\cdot i_{\text{ion}} \quad (\text{no Faradaic sink})
+\]
+This is the “memory element”: \(q\) integrates ionic current over time.
+
+**Capacity-limited ceiling (quantitative):**
+For a polymer volume \(V\) and gate step \(\Delta V\),
+\[
+Q_{\max}\approx C^* V\,\Delta V
+\]
+Example: \(C^*=20\,\mathrm{F/cm^3}\), \(V=10^{-10}\,\mathrm{cm^3}\), \(\Delta V=0.5\) V →  
+\(Q\approx 10^{-9}\) C → \(\sim 6\times 10^9\) monovalent ions moved per event.
+
+### Module 3: Ion–electron coupling law (field-defining)
+Electronic conductivity (or channel current) depends on the stored charge state:
+\[
+\sigma_e = \sigma_e(q) \quad \text{or} \quad I_D = \mathcal{G}(q,V_D)
+\]
+For depletion-mode PEDOT:PSS OECTs, cation uptake reduces hole density → \(\sigma_e\) decreases; for accumulation-mode materials, the sign can invert.
+
+**Operational “coupling selectivity” metric (proposal, but testable):**
+\[
+S_i=\frac{\partial \sigma_e}{\partial Q_i}\quad \text{or}\quad \frac{\partial I_D}{\partial Q_i}
+\]
+with \(Q_i=\int I_{G,i}\,dt\) under conditions verified to be non-Faradaic.
+
+### Module 4: Faradaic leakage / stability window (established constraint; often neglected)
+Outside the stability window, add a Faradaic sink/source \(R_i\) (electrochemistry-like):
+- water electrolysis, redox of polymer, oxygen reduction, etc.
+This is not “extra detail”—it determines whether the device is a capacitor-like synapse or a drifting electrochemical memory.
+
+**Typical stability numbers (order-of-magnitude):**
+In aqueous electrolytes, practical safe gate biases are often within roughly \(|V_G|\lesssim 0.6–0.8\) V vs a suitable reference, but exact limits depend on electrodes, pH, dissolved O\(_2\), and polymer redox potentials. (I defer to electrochemistry for rigorous window definitions.)
+
+### Where analogies hold vs break
+- **Holds:** access limitation / CP can limit gate charging in thick electrolytes or stagnant conditions; same \(i_{\lim}\) scaling applies in the electrolyte.
+- **Breaks:** “overpotential-only” or “EDL-only” transistor models. They predict weak thickness dependence of dynamics; real OECT/memristive polymer devices show \(\tau\propto L^2\) when volumetric charging dominates.
+
+---
+
+## C) Terminology mapping (iontronics → common framework)
+
+| Iontronics term | Common framework term |
+|---|---|
+| Volumetric capacitance \(C^*\) | Bulk storage coefficient linking potential to stored charge (state variable) |
+| Doping/de-doping | Reversible ion insertion coupled to electronic carrier density change |
+| OECT transconductance \(g_m\) | Sensitivity of electronic current to gate-driven state change (\(\partial I_D/\partial V_G\)) |
+| Ionic memristor | State-dependent ionic transport + storage element (history-dependent boundary operator) |
+| Electrochemical gating | Boundary operator that injects ions into a host, changing \(\sigma_e(q)\) |
+| Hysteresis / plasticity | State dependence due to slow ion motion and finite capacity |
+| Mixed ionic–electronic conductor (MIEC) | Medium with coupled ionic and electronic carriers |
+
+**Terms I’d advocate adopting:**
+- **State variable \(q\)** (or \(\theta\)) as a first-class object in the unified framework.
+- **Volumetric charging** (distinguishes from interfacial double-layer charging).
+
+**Terms I’d replace/qualify:**
+- “Capacitive” vs “Faradaic” should be treated as a **regime statement with diagnostics**, not a label. Many devices are mixed; we need criteria.
+
+---
+
+## D) Knowledge gaps / cross-field imports
+
+### What I want to import
+1) From electrochemistry: rigorous **separation of capacitive vs Faradaic** currents (e.g., potential-step analysis, EIS with equivalent-circuit pitfalls acknowledged, reference electrode protocols). Iontronics papers often under-report this.
+2) From membrane science: **fixed-charge and permselectivity quantification** to engineer ion-specific gating (e.g., suppress anion uptake or enforce cation selectivity in gels/polymers).
+3) From biology: **energetic selectivity design principles** (dehydration/coordination) to move beyond “any cation works” gating toward truly ion-specific neuromorphic behavior.
+
+### What iontronics can export
+- **Thickness-scaling diagnostics** (\(\tau\propto L^2\)?) as a clean falsification test for whether dynamics are volumetric diffusion-limited vs interfacial.
+- **Charge-collapse plots**: \(\Delta\sigma_e\) or \(\Delta I_D\) vs \(Q=\int I_G dt\) to demonstrate state control independent of waveform.
+
+---
+
+## One polite disagreement / caution
+I agree with the membrane/electrochem point that some “modules” are finite-thickness media, not pure boundaries. For iontronics, I’d go further: the active polymer is often the *dominant* transport/storage region, so treating it as a boundary condition can be misleading unless the module explicitly includes **distributed state evolution** (a PDE or at least a reduced RC-transmission-line model). Otherwise we will incorrectly predict both dynamics and memory.
+
+That’s my Round 1 input.
+
+## User
+
+Scientific Critic, please provide your thoughts on the discussion (round 1 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Scientific Critic
+
+### What was well-supported / genuinely unifying
+- **Core structure**: Everyone converged (again) on conservation + electrochemical-potential-driven transport as the only defensible “common core.” That’s real unification, not just vocabulary.
+- **Module contract idea**: All four experts naturally described their field’s “special sauce” as an interface/medium operator with inputs/outputs and parameters. This is a strong sign the architecture is workable.
+- **Quantitative anchors**: Each expert provided at least one number that can be used to falsify models (e.g., \(\tau\sim L^2/D\) in iontronics; \(P_K/P_{Na}\sim 10^3\) in biology; \(X\sim 0.5–2\) M in IEMs; concentrated-solution necessity in electrochemistry).
+
+---
+
+## 2–3 specific concerns / questions (rigor gaps)
+
+### 1) “Boundary operator” is drifting into a catch-all; we need a sharper definition
+Multiple speakers correctly noted that their “module” is **not a boundary** but a **finite-thickness region** (membrane, polymer, SEI, even “filter length” in channels). If we keep calling everything a boundary operator, we risk a category error.
+
+**Request for clarity:** Chair should define three module types explicitly:
+1) **Jump condition** (zero-thickness partition: Donnan-like),
+2) **Finite-thickness transport layer** (membrane/polymer/SEI with its own PDE),
+3) **Discrete-state element** (Markov/occupancy with detailed balance).
+
+Then require each field to declare which type(s) they use in A1.1/A1.2 and what variables are continuous across interfaces.
+
+### 2) \(\mu^{ex}\) is still at risk of becoming unfalsifiable
+Biology and iontronics were appropriately cautious, but we still have a loophole: “structured \(\mu^{ex}\)” can mean anything unless constrained.
+
+**Request for discipline:** For each field, specify a **minimal parameterization** with:
+- number of parameters,
+- measurement route,
+- expected uncertainty,
+- and at least one **out-of-sample prediction** (e.g., change salt concentration or thickness and predict scaling).
+
+Example: biology’s “saturable flux” is fine as a reduced model, but it must be labeled as such and tied to a measurable \(I_{\max}\) and \(K_m\) under stated voltage.
+
+### 3) Electrostatics criterion remains vague; “Poisson when needed” is not a criterion
+Everyone invoked electroneutrality with exceptions, but no one gave a crisp inequality that would let two groups implement the same model.
+
+**Request:** For A1.x, adopt an explicit rule set, e.g.:
+- Use electroneutrality in bulk by default.
+- Invoke Poisson only if **any** of: \(\lambda_D/a > 0.1\) (nanopore), \(\Pi=i/i_{\lim}>1\) with specified depletion threshold (e.g., \(c/c_b<0.01\) at interface), or \(\mathrm{Du}>1\) (surface conduction).
+This can be debated, but it must be written.
+
+---
+
+## Constructive suggestions to strengthen the framework
+
+1) **Write “module contracts” as testable I/O tables**
+For each module, require:
+- Inputs: \(c_i\), \(\phi\), \(T\), state variables, geometry.
+- Outputs: \(J_i\) or \(j\), potential jump, state evolution law.
+- Parameters: list with units + provenance.
+- Validity regime: 2–3 inequalities (e.g., \(\Xi\gg 1\), \(\Gamma\gtrsim 1\), etc.).
+
+2) **Force one wrong prediction per high-risk analogy**
+Biology already did this for Donnan-as-filter. Iontronics did it for EDL-only dynamics. Membranes did it mechanistically. Electrochemistry should add one explicit “wrong prediction” example too (e.g., dilute NP predicts incorrect sign/magnitude of concentration overpotential at 1 M under a given current).
+
+3) **Standardize reference frames and “per phase” definitions now**
+This is a recurring unit trap:
+- \(t_+^0\): must state reference frame and method.
+- \(X\): must state per membrane water phase and how water uptake is measured.
+- \(C^*\): must state per swollen polymer volume and hydration state.
+If these are not standardized, the unified framework will look coherent but produce incomparable numbers.
+
+---
+
+## Questions to the team (to answer next round)
+1) For A1.1, is the membrane/polymer treated as:
+   - (a) a jump-only interface,
+   - (b) a finite-thickness layer with its own PDE,
+   - or (c) both (jump + layer)?
+   Please pick one and justify with a length/time scale.
+
+2) For biology’s “A2-lite” saturable boundary operator: what is the **voltage dependence** of \(J_{\max}\) and \(K_m\)? If unspecified, it’s not portable into A1 where voltage is an output.
+
+3) For iontronics: provide a concrete diagnostic protocol that falsifies “purely capacitive” operation (e.g., coulombic efficiency over cycles, gas evolution threshold, redox peak absence). Otherwise “non-Faradaic” remains an assertion.
+
+4) For electrochemistry: propose a minimal A1.2 dataset policy—either a named electrolyte with a self-consistent parameter set or a formal uncertainty band. Right now it’s still hand-wavy.
+
+That’s all for Round 1.
+
+## User
+
+This concludes round 1 of 4 of discussion. Symposium Chair and PI, please synthesize the points raised by each team member, make decisions regarding the agenda based on team member input, and ask follow-up questions to gather more information and feedback about how to better address the agenda.
+
+## Symposium Chair and PI
+
+## Round 1 Synthesis (Chair/PI)
+
+### What we genuinely agree on (deep unification)
+1) **Common core is correct but must be operationalized**: conservation + flux driven by electrochemical potential gradients is accepted by all fields *as the backbone*, with the explicit caveat that predictiveness comes from closures and reference frames.
+2) **“Module contract” architecture is the right organizing principle**: each field naturally described its unique physics as an operator that maps local bath conditions (and possibly state) to fluxes/potential jumps and/or internal evolution.
+3) **Access limitation / boundary-layer control remains the deepest shared analogy**: everyone can anchor limiting behavior with \(i_{\lim}\sim zFDc_b/\delta\) or access resistance \(R_{\text{access}}\sim 1/(4a\kappa)\), with clear failure modes.
+
+### Where the framework needs tightening (shared concerns)
+1) **Boundary vs finite-thickness vs discrete element**: multiple experts (membranes, iontronics, electrochemistry) emphasized their “interface physics” is often a *finite-thickness region* (membrane, polymer, SEI), not a mathematical surface. Biology emphasized a *discrete-state element* for filters/gating. The Critic is right: we must formalize module types to avoid category errors.
+2) **\(\mu^{ex}\) must not become a junk drawer**: biology and iontronics explicitly warned; electrochemistry and membranes prefer disciplined parameterizations (\(\chi\), \(X\), \(K_i\), etc.). We need minimal parameter sets + provenance + at least one out-of-sample prediction per module.
+3) **Electrostatics criterion is still vague**: “Poisson when needed” is not implementable. We need explicit inequalities/thresholds for A1.x.
+
+---
+
+## Decisions (made now to keep us convergent)
+
+### Decision 1 — Replace “boundary operator” with “module” and define 3 module types
+We will use **Module** as the umbrella term, with three explicit types:
+
+- **Type J (Jump module)**: zero-thickness partition/jump conditions (e.g., Donnan partition).
+- **Type L (Layer module)**: finite-thickness transport layer with its own PDE/ODE (membrane, polymer film, SEI).
+- **Type D (Discrete module)**: discrete-state kinetics/occupancy (Markov filter, gating).
+
+Each field must label their add-ons as J/L/D (or combinations) and specify the state variables and timescales.
+
+### Decision 2 — A1.1 must be a J+L membrane module (not jump-only)
+For A1.1, we will not allow “Donnan jump only” as the membrane model. It must be:
+- **J**: Donnan partition at each interface, plus
+- **L**: electroneutral membrane bulk transport across thickness \(L_m\) with fixed charge constraint \(X\) (defined per membrane water phase).
+
+This is necessary to predict co-ion leakage, membrane potential, and ohmic drop.
+
+### Decision 3 — A1.2 is a bulk-closure upgrade (not an interface module)
+Electrochemistry’s point stands: concentrated-solution effects are not “boundary physics.” For A1.2 we will treat concentrated-solution transport as a **bulk constitutive upgrade**:
+- \(\kappa(c)\), \(D(c)\), \(t_+^0(c)\), \(\chi(c)\) with explicit reference frame.
+Until we curate a self-consistent dataset, A1.2 remains a **sensitivity study with uncertainty bands**.
+
+### Decision 4 — Standardize “reference/phase” definitions now (non-negotiable)
+For the reporting table and any benchmark runs:
+- \(t_+^0\): must state **reference frame** (solvent frame) and measurement method.
+- \(X\): must be reported per **membrane water phase** + water uptake method.
+- \(C^*\): must be per **swollen polymer volume** + hydration state.
+This is required for cross-field comparability.
+
+### Decision 5 — Electrostatics rule set for A1.x (provisional, to be refined in Round 2)
+For A1.0–A1.2 we will default to electroneutral bulk. We will only invoke Poisson/space charge if **any** of the following triggers are met (provisional thresholds):
+1) **Nanoconfinement**: \(\lambda_D/a > 0.1\) (pore radius \(a\) or characteristic length).
+2) **Strong depletion**: \(\Pi=i/i_{\lim} > 1\) *and* predicted interfacial concentration \(c(0)/c_b < 10^{-2}\).
+3) **Surface conduction relevance** (when a pore/surface model exists): \(\mathrm{Du}>1\).
+
+We will revisit thresholds after Round 2 input.
+
+---
+
+## Translation table (early draft—what we learned in Round 1)
+- Donnan potential → **partition potential jump** (Type J module output)
+- Fixed charge \(X\) → **background charge constraint** in membrane water phase (closure)
+- Thermodynamic factor \(\chi\) → **non-ideality closure** for \(\partial \mu/\partial \ln c\)
+- SEI resistance → **interphase layer module** (Type L)
+- Selectivity filter → **discrete module** (Type D) with structured free energies/barriers
+- Volumetric capacitance \(C^*\) → **storage coefficient** linking potential to stored charge state \(q\) (Type L with state)
+
+---
+
+## Follow-up questions (to drive Round 2; please answer with assumptions + one number)
+
+### To Electrochemistry Scientist
+1) **A1.2 minimal closure**: For a binary 1:1 electrolyte, what is the minimal set of bulk equations you propose we standardize on (e.g., Newman form for \(i_e\) + salt conservation)? Please write them in the exact variables you want A1 to use.
+2) **Reference frame**: confirm the exact definition of \(t_+^0\) you want (solvent frame) and one sentence on how it maps (or fails to map) to membrane \(t_+^m\).
+3) **One wrong prediction**: give a concrete example where dilute NP gives the wrong magnitude/sign for concentration overpotential at ~1 M (even a stylized case is fine: \(L=100\,\mu\)m, \(i=10\) mA/cm²).
+
+### To Membrane Science Expert
+4) For A1.1 (J+L), propose a **minimal parameter set**: \(\{X, L_m, D_+^m, D_-^m\}\) plus any activity correction you insist on. Which of these are “established” vs “fit” in typical practice?
+5) Provide a **numerical example** of how reporting \(X\) per dry polymer vs per water phase changes \(\Xi=X/c_b\) (pick a water uptake, e.g., 0.3–0.6 g water/g dry).
+
+### To Biological Ion Transport Scientist
+6) For the A2-lite discrete module: specify whether your saturable flux law is intended at **fixed voltage** or can be made voltage-dependent. If voltage-dependent, what functional form do you recommend that is still minimal (e.g., \(J_{\max}(V)\propto \sinh(FV/2RT)\) or linear response)?
+7) Provide one candidate **channel dataset** (name + conditions) you’d be comfortable using as a calibration target later (even if we don’t implement A2 yet).
+
+### To Iontronics Scientist
+8) Define the minimal **state model** we should adopt for iontronics as a module: is it (i) diffusion of ions into a film with capacity \(C^*\) (PDE), or (ii) a reduced RC/transmission-line model? State what outputs it must return to the core solver.
+9) Give a **falsification protocol** for “reversible capacitive regime” (e.g., coulombic efficiency threshold, absence of redox peaks, thickness scaling, gas evolution). Pick 2 diagnostics and a quantitative pass/fail criterion.
+
+### To Scientific Critic
+10) Are the three module types (J/L/D) sufficient, or do we need a fourth (e.g., “reaction module” distinct from discrete)? If sufficient, propose the minimal checklist that makes a module contract falsifiable (inputs/outputs/parameters/regime).
+
+---
+
+## What we will produce at end of Round 2 (so everyone knows the target)
+1) A <200-word unified framework statement that explicitly includes module types and closure discipline.
+2) A terminology mapping table (10–20 entries) with “adopt vs replace” decisions.
+3) A short list of 3–5 cross-field testable predictions/experiments, each tied to a module and a scaling law (e.g., \(i_{\lim}\propto c_b/\delta\); \(\tau\propto L^2\); selectivity energy \(RT\ln\) ratios).
+
+Proceeding to Round 2, we’ll keep the rule: assumptions → equations/module → one number → one failure mode.
+
+## User
+
+Electrochemistry Scientist, please provide your thoughts on the discussion (round 2 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Electrochemistry Scientist
+
+### Assumptions (for my answers below)
+- Binary 1:1 electrolyte, isothermal.
+- Planar 1D transport normal to interface (Benchmark A1 geometry).
+- No convection in the electrolyte region (\(u=0\)).
+- Electroneutral bulk in A1.0–A1.2 (Poisson only if the Chair’s triggers are met).
+- “Electrochemistry closure” here means **concentrated-solution theory in the solvent frame** (Newman/Stefan–Maxwell), not dilute NP.
+
+---
+
+## 1) A1.2 minimal bulk closure (exact equations/variables)
+
+For A1.2 I recommend we standardize on the classic Newman concentrated-solution form for a binary electrolyte, written in terms of **salt concentration** \(c(x,t)\), **electrolyte potential** \(\phi_e(x,t)\), and **electrolyte current density** \(i_e(x,t)\).
+
+### (i) Charge conservation in electrolyte (no Faradaic in bulk)
+\[
+\frac{\partial i_e}{\partial x}=0 \quad \Rightarrow \quad i_e(x,t)=i(t)\ \text{(constant in 1D)}
+\]
+
+### (ii) Constitutive relation for electrolyte current (concentrated solution)
+\[
+\boxed{\,i_e=-\kappa(c)\frac{\partial \phi_e}{\partial x}
++\frac{2RT\,\kappa(c)}{F}\,(1-t_+^0(c))\,\chi(c)\,\frac{\partial \ln c}{\partial x}\,}
+\]
+- \(\kappa(c)\): ionic conductivity (S/m)
+- \(t_+^0(c)\): cation transference number in the **solvent frame**
+- \(\chi(c)\): thermodynamic factor (dimensionless), \(\chi=1+\partial\ln\gamma_\pm/\partial\ln c\)
+
+This equation is the workhorse for “concentration overpotential” in batteries.
+
+### (iii) Salt conservation (with chemical diffusion coefficient)
+A minimal, implementable form is:
+\[
+\boxed{\,\frac{\partial c}{\partial t}
+=\frac{\partial}{\partial x}\!\left(D_\text{chem}(c)\frac{\partial c}{\partial x}\right)
++\frac{1-t_+^0(c)}{F}\frac{\partial i_e}{\partial x}\,}
+\]
+In 1D with constant \(i_e\), the source term vanishes and it reduces to diffusion with \(D_\text{chem}(c)\). (In porous electrodes with distributed reaction, \(\partial i_e/\partial x\neq 0\) and the source term matters; for A1 it’s fine to omit.)
+
+**Note:** Some texts write salt flux explicitly and derive an effective \(D_\text{eff}\) that already contains \(\chi\). For the benchmark, we should pick one convention and stick to it; above is the simplest to implement without ambiguity.
+
+### Boundary conditions (for A1.2 electrolyte region)
+- Reservoir at \(x=\delta\): \(c(\delta,t)=c_b\), \(\phi_e(\delta,t)=0\) (reference).
+- At the selective interface \(x=0\): depends on A1.0/A1.1 module; for “ideal cation-selective” one can impose anion flux \(J_-(0,t)=0\) (or equivalently a transport-number condition). This is where the membrane module plugs in.
+
+---
+
+## 2) Reference frame: what exactly is \(t_+^0\), and mapping to membrane \(t_+^m\)
+
+### Definition (must be stated)
+\[
+t_+^0 \equiv \frac{z_+F J_+}{i_e}\Bigg|_{\text{solvent frame}}
+\]
+i.e., the fraction of current carried by cations when fluxes are defined relative to the **solvent velocity**.
+
+### Mapping to membrane \(t_+^m\): only conditional
+- In an IEM, \(t_+^m\) is often an **effective transport number inside the membrane phase**, influenced by fixed charge \(X\), co-ion exclusion, and different mobilities.
+- In a liquid electrolyte, \(t_+^0\) reflects **ion–solvent and ion–ion friction** (Stefan–Maxwell couplings) and can be low (e.g., 0.2–0.4) even without any “co-ion exclusion.”
+
+So: they are mathematically analogous “transport numbers,” but **physically different levers**. Treating \(t_+^m\approx t_+^0\) is generally wrong unless you are explicitly modeling the same phase and same reference frame.
+
+---
+
+## 3) One concrete “wrong prediction” from dilute NP at ~1 M (stylized but falsifiable)
+
+### Claim (established qualitatively; magnitude depends on dataset)
+If you use dilute NP with ideal activities (\(\chi=1\)) and constant \(t_+\) to predict concentration polarization in a 1 M carbonate electrolyte, you will under/over-predict the **concentration overpotential** by **tens of mV** at battery-relevant currents because \(\chi(c)\) and \(t_+^0(c)\) are not near-constant and not near-ideal.
+
+### Stylized example (order-of-magnitude)
+Take:
+- \(c_b=1\) M, \(\delta=100\,\mu\)m
+- \(i=10\) mA/cm\(^2\) (=100 A/m\(^2\))
+- \(D_\text{chem}\sim 1\times 10^{-10}\) m\(^2\)/s (typical order for Li-salt in carbonate)
+Then \(i/i_{\lim}\sim 1\) using \(i_{\lim}\sim F D c/\delta \approx 9.6\) mA/cm\(^2\), so we are in strong depletion where non-idealities matter.
+
+Now compare two closures:
+- **Dilute NP**: \(\chi=1\), \(t_+^0=0.5\) (often implicitly assumed or effectively used)
+- **More realistic**: \(t_+^0\sim 0.3\), \(\chi\sim 1.5–2\) (not unusual in concentrated electrolytes)
+
+The concentration term in the current relation scales as \((1-t_+^0)\chi\). That factor changes from:
+- dilute assumption: \((1-0.5)\cdot 1 = 0.5\)
+- realistic: \((1-0.3)\cdot (1.5–2)=1.05–1.4\)
+
+So the predicted concentration-driven potential gradient (and thus concentration overpotential) differs by roughly **2–3×**. If the concentration overpotential is, say, 30 mV in one model, it becomes 60–90 mV in the other—an experimentally meaningful discrepancy.
+
+**Where the analogy breaks:** membrane Donnan partitioning is a jump condition; this electrochemistry error is a **bulk thermodynamic/transport closure** error.
+
+---
+
+## 4) Extra: dataset policy suggestion (to operationalize A1.2)
+I support the Chair’s decision: treat A1.2 as a sensitivity study unless we curate a self-consistent dataset. Concretely:
+- Choose a nominal set: \(\kappa(c)\), \(D_\text{chem}(c)\), \(t_+^0(c)\), \(\chi(c)\)
+- Assign uncertainty bands: \(\kappa\) ±5%, \(D\) ±30%, \(t_+^0\) ±0.1 absolute, \(\chi\) ±30–50%
+- Report outputs as bands (not single curves)
+
+This will prevent false precision and will also tell us which parameter dominates uncertainty in predicted \(i\)–\(V\).
+
+That’s my Round 2 input.
+
+## User
+
+Membrane Science Expert, please provide your thoughts on the discussion (round 2 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Membrane Science Expert
+
+### Assumptions (for A1.1-focused answers)
+- Planar 1D, steady or quasi-steady.
+- Binary 1:1 electrolyte (e.g., NaCl) in aqueous solution.
+- No convection in diffusion layers for A1 (so CP is purely diffusive/migrative).
+- **Electroneutral membrane bulk** with fixed charge \(X\) (defined per membrane water phase).
+- Donnan partitioning at interfaces treated as **jump (Type J)**; membrane interior is **layer (Type L)**.
+
+---
+
+## 4) A1.1 minimal membrane module: parameters + what’s “established” vs “fit”
+
+### Proposed minimal parameter set (J+L)
+For a cation-exchange membrane (CEM) in A1.1, the minimal set that still predicts co-ion leakage and voltage is:
+
+1) **Fixed charge density (water phase)**: \(X\) [mol/L of membrane water]
+2) **Membrane thickness**: \(L_m\) [m]
+3) **Effective diffusivities in membrane water phase**: \(D_+^m, D_-^m\) [m²/s]
+4) **(Optional but recommended) membrane water uptake**: \(\lambda\) or \(\phi_w\) (to convert dry-basis IEC to \(X\))
+
+I would *not* add activity coefficients in the membrane for A1.1 unless we explicitly decide to; it’s a second-order complication compared to getting \(X\) and \(D_i^m\) defined consistently.
+
+### Governing relations inside the membrane (Type L)
+Electroneutrality constraint:
+\[
+c_+^m - c_-^m = X
+\]
+Transport (Nernst–Planck form; Onsager equivalent is fine):
+\[
+J_i^m = -D_i^m\frac{dc_i^m}{dx} - \frac{z_i D_i^m F}{RT}c_i^m\frac{d\phi^m}{dx}
+\]
+Current:
+\[
+i = F\sum_i z_i J_i^m
+\]
+Steady state: \(dJ_i^m/dx=0\).
+
+### Interface relations (Type J)
+At each solution/membrane interface:
+- Continuity of electrochemical potential (Donnan partition), ideally:
+\[
+RT\ln c_i^s + z_iF\phi^s = RT\ln c_i^m + z_iF\phi^m
+\]
+plus electroneutrality in membrane to solve for \(\Delta\phi_D\) and \(c_i^m\) at the interface.
+
+### What is “established” vs “fit” in practice
+- **Established / measurable with relatively direct methods**
+  - \(L_m\): micrometer measurement (±1–5%).
+  - Water uptake (swelling): gravimetric (±5–10% if careful).
+  - IEC (ion exchange capacity) on dry basis: titration (±5–10%).
+  - From IEC + water uptake → \(X\) (but uncertainty propagates; see below).
+- **Often “fit” or method-dependent**
+  - \(D_i^m\): typically inferred from conductivity, tracer diffusion, membrane potential fits, or permeation; can vary **~×2** across methods/labs.
+  - Effective \(t_+^m\): inferred from membrane potential/permselectivity; depends on concentration and co-ion leakage.
+
+**Quantitative anchor:** typical values for commercial IEMs  
+- \(X \sim 0.5–2\) M (water phase)  
+- \(D_i^m \sim 10^{-11}–10^{-10}\,\mathrm{m^2/s}\)  
+- \(L_m \sim 50–200\,\mu\)m
+
+---
+
+## 5) Numerical example: why “\(X\) per dry polymer” vs “per water phase” changes \(\Xi=X/c_b\)
+
+### Setup (explicit)
+Take a membrane with:
+- IEC (dry basis) = **1.5 meq/g dry** = \(1.5\times 10^{-3}\) mol charge / g dry
+- Water uptake = **0.5 g water / g dry** (moderately swollen)
+Assume density of water ~1 g/mL, so 0.5 g water ≈ 0.5 mL water.
+
+### Correct conversion to water-phase fixed charge \(X\)
+Per 1 g dry polymer:
+- Fixed charge moles = \(1.5\times 10^{-3}\) mol
+- Water volume = \(0.5\) mL = \(5\times 10^{-4}\) L
+
+So:
+\[
+X = \frac{1.5\times 10^{-3}}{5\times 10^{-4}} = 3\ \text{mol/L (water phase)}
+\]
+That’s a very high \(X\) (some membranes are lower; this is illustrative).
+
+### What goes wrong if someone reports “per dry polymer volume” or “per total swollen volume”
+If instead you (incorrectly for Donnan) divide by **total swollen volume** (dry polymer + water), you might dilute \(X\) by a factor ~1.5–3 depending on polymer density and swelling. Or if you report “mol/kg dry” without converting to water phase, you can’t compare to \(c_b\) at all.
+
+### Impact on selectivity strength \(\Xi=X/c_b\)
+Let external salt be \(c_b=0.1\) M:
+- Correct: \(\Xi = 3/0.1 = 30\) (strong permselectivity expected)
+If you mistakenly used an “effective” \(X=1\) M from a different basis:
+- \(\Xi=10\) (still strong, but predicts noticeably more co-ion leakage and lower permselectivity)
+
+At \(c_b=0.5\) M:
+- Correct: \(\Xi=6\) (co-ion leakage becomes significant)
+- Mistaken: \(\Xi=2\) (predicts much worse selectivity)
+
+So basis errors can shift predicted regimes (strong vs moderate permselectivity) and therefore predicted \(i\)–\(V\) curves.
+
+**Uncertainty note (established):** if water uptake is ±20% and IEC is ±10%, then \(X\) uncertainty is roughly ±22% (propagated), often larger in practice due to heterogeneity.
+
+---
+
+## One polite disagreement / refinement to the Chair’s electrostatics triggers
+The proposed Poisson trigger “\(\Pi>1\) and \(c(0)/c_b<10^{-2}\)” is a good start, but for IEM/ED the onset of space-charge/overlimiting phenomena can occur before \(10^{-2}\) depending on hydrodynamics and surface properties. I’d suggest we treat that threshold as **benchmark-specific** and report it as a sensitivity parameter rather than a universal constant.
+
+---
+
+## Cross-field note (where analogy holds/breaks)
+- **Holds:** Donnan partitioning is formally a chemical potential continuity condition—very compatible with the unified \(\mu\)-based framework.
+- **Breaks:** Donnan is not a diffuse double layer model; it should not be parameterized via Debye length. The correct control parameter for IEM permselectivity is \(\Xi=X/c_b\), not \(\lambda_D\) (except in nanoporous NF-like regimes).
+
+That’s my Round 2 input.
+
+## User
+
+Biological Ion Transport Scientist, please provide your thoughts on the discussion (round 2 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Biological Ion Transport Scientist
+
+### Assumptions (for answering Q6–Q7)
+- We are modeling **open-state permeation** (gating separated as a slower state variable).
+- Baths are well-mixed reservoirs; access region can be treated by continuum electrodiffusion.
+- The “A2-lite” module is a **reduced model** intended to be plug-compatible with A1 (planar diffusion layer), not a full structural model of a channel.
+
+---
+
+## 6) A2-lite saturable boundary operator: fixed-voltage vs voltage-dependent?
+
+### My position
+For portability into A1 (where voltage is an output under imposed current), the A2-lite operator **must be voltage-dependent**, otherwise it is not well-posed: you can’t close \(i\)–\(V\) without specifying how flux responds to the local driving force.
+
+### Minimal voltage-dependent form (recommended)
+A simple, thermodynamically consistent choice is a **saturable conductance** multiplied by a driving-force term that reduces to linear response at small \(V\). For a monovalent ion \(i\):
+
+\[
+\boxed{
+J_i(V,c)=J_{i,\max}\,\frac{c}{K_{m,i}+c}\,\sinh\!\left(\frac{z_i F V}{2RT}\right)
+}
+\]
+
+- At small \(V\): \(\sinh(x)\approx x\), so \(J_i\propto V\) (Ohmic).
+- At larger \(V\): captures exponential increase without invoking Butler–Volmer chemistry (it’s just a convenient odd function consistent with detailed balance for symmetric barriers).
+- Saturation with \(c\) captures occupancy limitation.
+
+**What is established vs hypothesis**
+- **Established:** channels show saturating \(I\) vs \(c\) in many cases (Michaelis–Menten-like), and approximately odd \(I\)–\(V\) around 0 for symmetric conditions.
+- **Hypothesis / reduced-model choice:** the specific \(\sinh(FV/2RT)\) form is a modeling convenience; real channels can rectify and have asymmetric barriers. But it is a good “minimal” closure for a benchmark module.
+
+### Alternative (even more minimal, linear-response only)
+If we want to stay strictly near-equilibrium:
+\[
+J_i(V,c)=\left(\frac{G_{i,\max}\,c}{K_{m,i}+c}\right)\,V
+\]
+This is easier but fails at larger voltages where many channels are not linear.
+
+### Parameter magnitudes (quantitative anchors)
+If we target a K\(^+\) channel-like open state with \(I\sim 10\) pA at \(V=100\) mV and \(c\gtrsim 100\) mM (near saturation), then:
+\[
+J_{\max}\approx \frac{I_{\max}}{F}\sim 10^{-16}\ \text{mol/s}
+\]
+For selectivity encoded primarily in \(K_m\):
+- plausible reduced-model placeholders: \(K_{m,K}\sim 1–30\) mM; \(K_{m,Na}\sim 0.5–5\) M (encodes 10²–10³ occupancy preference).
+
+---
+
+## 7) One candidate channel dataset for later calibration (named + conditions)
+
+A practical, widely cited benchmark for K\(^+\) selectivity and conductance is **KcsA** (bacterial K\(^+\) channel), because:
+- high-resolution structures exist (selectivity filter geometry is well defined),
+- extensive electrophysiology exists in symmetric/asymmetric KCl and with Na\(^+\) substitution,
+- it is a canonical system for structure–function discussions.
+
+**Suggested calibration target (example conditions to specify later):**
+- Channel: **KcsA** (open state stabilized by low pH; note gating complications)
+- Temperature: ~room temperature (22–25°C)
+- Solutions: symmetric KCl (e.g., 100 mM) for conductance; bi-ionic K\(^+\)/Na\(^+\) conditions for reversal potential and \(P_K/P_{Na}\)
+- Outputs: single-channel conductance \(g\) (pS), \(E_{\text{rev}}\) under bi-ionic conditions → infer \(P_K/P_{Na}\)
+
+**Uncertainty (typical):**
+- \(P_K/P_{Na}\) inferred from reversal potentials often ±0.2–0.5 log units (×1.6–3), depending on leak subtraction and activity corrections.
+- Conductance ±10–30% across preparations.
+
+(If the team prefers a eukaryotic channel with more standardized patch-clamp datasets, we could instead use **Shaker Kv** for K\(^+\) selectivity and gating kinetics, but structural resolution historically lagged KcsA; now there are good Kv structures too. I’m flexible.)
+
+---
+
+## One polite caution (re: module types)
+I support the Chair’s J/L/D module taxonomy. For biology, the selectivity filter is best treated as **Type D** (discrete) even though it has finite length, because the key closure is not a continuum PDE but a small-state Markov network constrained by detailed balance. If we force it into Type L too early, we’ll end up hiding the physics in an arbitrary \(\mu^{ex}(x)\).
+
+That’s my Round 2 input.
+
+## User
+
+Iontronics Scientist, please provide your thoughts on the discussion (round 2 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Iontronics Scientist
+
+### Assumptions (for Q8–Q9)
+- We are discussing OECT-like or polymer ionic memristor devices in aqueous electrolyte.
+- We aim for the **reversible capacitive regime** (no net Faradaic chemistry), but we must define diagnostics.
+- Polymer is a finite-thickness mixed conductor; electrolyte outside can be treated with A1 diffusion layer if needed.
+
+---
+
+## 8) Minimal iontronics state model module: PDE vs reduced model, and required outputs
+
+### My recommendation: start with a **Type L (Layer) module** with a 1D diffusion + storage state variable
+For portability and falsifiability, the minimal model should explicitly include:
+- a **state variable** \(q(x,t)\) (stored ionic charge density, C/m³) or equivalently an ion concentration deviation \(\Delta c(x,t)\),
+- a **transport law** for ions in the polymer (diffusion-dominated is the minimal assumption),
+- a **constitutive storage relation** linking \(q\) to local potential difference via \(C^*\).
+
+A minimal PDE form (one mobile compensating ion species, monovalent) is:
+
+**Ion transport in polymer (minimal)**
+\[
+\partial_t c(x,t)=\partial_x\!\left(D_{\text{ion}}\,\partial_x c\right)
+\]
+**Storage / electroneutral coupling (minimal capacitive closure)**
+\[
+q(x,t)=F\,(c(x,t)-c_0) \quad \text{and} \quad q(x,t)\approx C^*\big(\phi_p(x,t)-\phi_{\text{elyte}}(x,t)\big)
+\]
+This is intentionally minimal; more complete models include migration and electronic transport self-consistently, but this is enough to generate:
+- finite capacity,
+- diffusion-limited dynamics,
+- thickness scaling \(\tau\propto L^2/D_{\text{ion}}\).
+
+### Reduced alternative (acceptable if we need speed): transmission-line / RC ladder
+If the team wants a compact module for circuit-level benchmarking, we can use a distributed RC line:
+- ionic resistance per length \(r_{\text{ion}}\),
+- volumetric capacitance per length \(c_{\text{vol}}=C^*A\),
+giving a diffusion-like time constant \(\tau\sim r_{\text{ion}}c_{\text{vol}}L^2\). This is mathematically equivalent to diffusion under some assumptions.
+
+### Required module outputs to the core solver
+At minimum, the iontronics module must return:
+1) **Interfacial ionic flux** at the electrolyte/polymer boundary: \(J_i(0,t)\) (or ionic current \(i_{\text{ion}}(t)\)).
+2) **State evolution**: \(q(x,t)\) or an averaged \(Q(t)=\int q\,dV\).
+3) **Electronic modulation proxy**: either \(\sigma_e(t)\) or a mapping \(I_D(t)=\mathcal{G}(Q(t),V_D)\).
+
+If we omit (3), we can still model ion transport, but we cannot connect to “device function” (transistor/memristor behavior).
+
+**Quantitative anchor:** typical parameters
+- \(C^*\sim 10–40\,\mathrm{F/cm^3}\) (per swollen volume)
+- \(D_{\text{ion}}\sim 10^{-11}–10^{-10}\,\mathrm{m^2/s}\)
+- \(L=100\) nm → \(\tau\sim 1\) ms (for \(10^{-11}\)); \(L=1\,\mu\)m → \(\tau\sim 0.1\) s
+
+---
+
+## 9) Falsification protocol for “reversible capacitive regime”: 2 diagnostics + quantitative criteria
+
+I propose we standardize two diagnostics that are (i) easy to run, (ii) hard to game, and (iii) map to the model assumptions.
+
+### Diagnostic A — Charge balance / coulombic efficiency under symmetric cycling (established concept; criterion proposed)
+Protocol: apply a symmetric gate waveform (e.g., ±0.4 V vs Ag/AgCl, square pulses or triangular CV-like sweep) for \(N\) cycles; integrate gate current.
+
+Criterion:
+\[
+\eta_Q=\frac{|Q_{\text{out}}|}{|Q_{\text{in}}|} \ge 0.98
+\]
+over a defined time window (e.g., per cycle after initial conditioning). If \(\eta_Q\) is significantly below 0.98, there is net Faradaic leakage or irreversible trapping.
+
+Notes:
+- This is not perfect (some reversible redox can still give \(\eta_Q\approx 1\)), but it is a strong first screen.
+- We must specify reference electrode and exclude series resistance artifacts.
+
+### Diagnostic B — Thickness scaling of switching time (established; criterion proposed)
+Protocol: fabricate devices with at least 3 thicknesses (e.g., \(L=50, 100, 200\) nm) with otherwise identical geometry; apply identical gate steps; extract a characteristic time constant \(\tau\) (e.g., 10–90% rise time of \(I_D\) or \(Q\)).
+
+Criterion:
+\[
+\tau \propto L^2 \quad \text{within ±30% on the exponent}
+\]
+i.e., fit \(\tau\sim L^n\) and require \(n=2\pm 0.3\). If \(n\approx 0\)–1, dynamics are likely dominated by interfacial EDL, contact resistance, or instrumentation—not volumetric diffusion/storage.
+
+### Optional “red flag” add-on (if we’re allowed a third)
+- **Gas evolution / pH shift** near electrodes during gating (visual bubbles, pH indicator) is a qualitative but decisive sign of water electrolysis.
+- Or **CV redox peaks**: appearance of pronounced faradaic peaks indicates redox processes; absence does not guarantee non-Faradaic, but presence is strong evidence.
+
+**Where I defer to electrochemistry:** defining the stability window rigorously vs reference electrode and accounting for dissolved oxygen reactions.
+
+---
+
+## One polite disagreement / refinement
+I agree with the Critic that we must constrain \(\mu^{ex}\). For iontronics, I suggest we avoid hiding everything in \(\mu^{ex}\) by explicitly reporting **\(C^*\)** and **\(D_{\text{ion}}\)** as the primary “closure parameters,” and treat partition \(K_i\) as secondary unless ion-specificity is the focus. This keeps the module falsifiable: \(C^*\) and \(D\) predict both charge capacity and time constants.
+
+That’s my Round 2 input.
+
+## User
+
+Scientific Critic, please provide your thoughts on the discussion (round 2 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Scientific Critic
+
+### What was well-supported in Round 2
+- **Electrochemistry** provided an implementable A1.2 closure (Newman form) with explicit variables and a clear statement that the “special sauce” is bulk constitutive physics, not boundary conditions. Good.
+- **Membranes** gave a clean minimal A1.1 parameter set and, importantly, a numerical conversion showing why \(X\) must be reported per membrane water phase. This directly addresses a major comparability trap.
+- **Biology** acknowledged the well-posedness issue and proposed a voltage-dependent reduced boundary operator. That’s the right move; a voltage-independent Michaelis–Menten flux would not close A1 under imposed current.
+- **Iontronics** proposed two falsification diagnostics with quantitative thresholds (coulombic efficiency and thickness scaling). This is exactly the kind of operational rigor we need.
+
+---
+
+## Key concerns / questions (2–3) that still threaten rigor
+
+### 1) Electrochemistry A1.2 salt conservation: potential ambiguity remains
+The electrochemistry scientist wrote a salt conservation equation that reduces to pure diffusion when \(\partial_x i_e=0\). That’s fine for A1’s “no reaction in bulk” geometry, but it risks hiding a subtlety:
+
+- In concentrated-solution theory, the **effective chemical diffusion coefficient** and the way \(\chi\) enters can be defined differently across conventions (some fold \(\chi\) into \(D_\text{chem}\), some keep it separate).
+- If we don’t specify the convention, two groups can implement “the same equations” and still disagree.
+
+**Request:** For A1.2, freeze one canonical form and define whether \(D_\text{chem}\) already includes \(\chi\). Also specify whether \(c\) is salt concentration or individual ion concentration (sounds like salt, but must be explicit).
+
+### 2) Biology reduced operator: thermodynamic consistency is asserted but not demonstrated
+The proposed
+\[
+J_i \propto \frac{c}{K_m+c}\sinh\left(\frac{FV}{2RT}\right)
+\]
+is plausible, but “consistent with detailed balance” depends on how \(c\) is defined (left vs right bath), and whether the operator respects **zero flux at zero driving force** when chemical potentials are equal.
+
+**Request:** Define the operator in terms of **electrochemical potential difference** \(\Delta \mu_i\), not just \(V\) and a single \(c\). For example:
+\[
+J_i = J_{i,\max}\frac{\bar c}{K_{m,i}+\bar c}\sinh\left(\frac{\Delta \mu_i}{2RT}\right)
+\]
+with \(\Delta\mu_i = RT\ln(a_{i,L}/a_{i,R}) + z_iF(\phi_L-\phi_R)\).
+Otherwise, it’s too easy to violate equilibrium constraints in asymmetric conditions.
+
+### 3) Iontronics “coulombic efficiency ≥ 0.98” is necessary but not sufficient
+High charge balance does not rule out reversible Faradaic redox (pseudocapacitance) or oxygen reduction that is balanced on the reverse sweep. If the project’s definition of “capacitive regime” means “no chemical transformation,” we need a stronger criterion.
+
+**Request:** Add at least one orthogonal diagnostic tied to chemistry (e.g., absence of redox peaks in CV over a defined scan rate range; or in situ pH/O\(_2\) monitoring; or EQCM mass change consistent with ion uptake rather than gas evolution). The iontronics scientist hinted at this; it should be formalized.
+
+---
+
+## Constructive suggestions (how to strengthen the unified framework now)
+
+1) **Freeze variable definitions in A1.1/A1.2**
+- \(c\): salt concentration (mol/m³) vs ion concentration—choose one.
+- \(a_i\): activity in solution; in A1.1 membrane phase, decide whether ideal \(a_i=c_i\) is assumed.
+- \(X\): mol/L of membrane water phase (explicit conversion required).
+- \(C^*\): F per cm³ of swollen polymer (state hydration specified).
+
+2) **Require each module to pass two “sanity checks”**
+- **Equilibrium check:** if \(\Delta \mu_i=0\) for all ions, then \(J_i=0\).
+- **Scaling check:** reproduce one known scaling (e.g., \(i_\lim\propto c_b/\delta\), \(\tau\propto L^2\)).
+
+3) **Clarify what A1 is testing**
+Right now A1 mixes two goals:
+- testing access limitation and CP (deep analogy),
+- testing selectivity modules (Donnan, leakage, etc.),
+- testing concentrated-solution bulk closure (electrochemistry).
+That’s okay, but we must state which outputs correspond to which physics, otherwise disagreements will be misattributed.
+
+---
+
+## Specific follow-up questions (for Round 3)
+1) **Electrochemistry:** Provide one explicit statement: is \(D_\text{chem}(c)\) the “chemical diffusion coefficient” including thermodynamic factor, or is it a tracer/self diffusion? Give units and a typical value at 1 M.
+2) **Membranes:** In A1.1, do you assume equal \(D_+^m=D_-^m\) as a baseline, or do you insist on asymmetry? What is a realistic ratio \(D_+^m/D_-^m\) for a CEM?
+3) **Biology:** Rewrite your reduced operator in terms of \(\Delta\mu_i\) so it automatically satisfies equilibrium constraints under asymmetric baths.
+4) **Iontronics:** Add one chemistry-sensitive diagnostic and a quantitative threshold (even if approximate) to complement charge balance and thickness scaling.
+
+Overall: strong progress—Round 2 moved from “conceptual unity” to “implementable contracts,” but we still need to lock definitions to prevent silent divergence.
+
+## User
+
+This concludes round 2 of 4 of discussion. Symposium Chair and PI, please synthesize the points raised by each team member, make decisions regarding the agenda based on team member input, and ask follow-up questions to gather more information and feedback about how to better address the agenda.
+
+## Symposium Chair and PI
+
+## Round 2 Synthesis (Chair/PI)
+
+### What improved materially in Round 2
+1) **A1.2 is now implementable**: Electrochemistry provided a concrete concentrated-solution closure (Newman form) with explicit variables \(\{c,\phi_e,i_e\}\) and a clear statement that this is a *bulk constitutive upgrade*, not an interface trick.
+2) **A1.1 membrane module is now well-posed**: Membranes provided a minimal J+L module with \(\{X,L_m,D_+^m,D_-^m\}\) and, crucially, a numerical demonstration of why \(X\) must be reported per membrane water phase.
+3) **Biology module is now closer to portable**: Biology acknowledged the well-posedness issue under imposed current and proposed a voltage-dependent reduced operator.
+4) **Iontronics module is now falsifiable**: Iontronics proposed a minimal state model (Type L) and two quantitative diagnostics (charge balance and thickness scaling).
+5) **Critic sharpened the remaining failure modes**: variable-definition ambiguity (especially \(D_\text{chem}\) and \(\chi\)), thermodynamic consistency of reduced biology operator, and “capacitive” diagnostics that are necessary but not sufficient.
+
+---
+
+## Decisions (updated / refined after Round 2)
+
+### Decision 6 — Freeze variable definitions for A1.x (to prevent silent divergence)
+For A1.0–A1.2 we will standardize:
+
+- \(c(x,t)\): **salt concentration** (mol/m³) for a 1:1 electrolyte. Individual ion concentrations are \(c_+=c_-=c\) in electroneutral bulk solution.
+- \(a_i\): activity in solution; in A1.0–A1.1 we will assume **ideal solution** \(a_i=c_i/c^\circ\) unless explicitly running a “non-ideal solution” variant.
+- Membrane phase in A1.1: assume **ideal activities in membrane water phase** as baseline (A1.1a). We can add a non-ideal membrane variant later (A1.1b) if needed.
+- \(X\): fixed charge density in **mol/L of membrane water phase** (mandatory).
+- \(D_\text{chem}(c)\): **chemical diffusion coefficient of the salt** (mol/m³ variable), with a required note stating whether it is measured as chemical diffusion or inferred; do not substitute self-diffusion without labeling.
+
+### Decision 7 — Two universal module sanity checks (mandatory)
+Every module (J/L/D) must pass:
+1) **Equilibrium check**: if \(\Delta \mu_i=0\) for all ions, then \(J_i=0\).
+2) **Scaling check**: reproduce one known scaling in its regime (e.g., \(i_{\lim}\propto c_b/\delta\), \(\tau\propto L^2\), or \(RT\ln\) selectivity energy).
+
+### Decision 8 — Biology reduced operator must be written in \(\Delta\mu_i\) form
+To ensure thermodynamic consistency under asymmetric baths, the A2-lite operator (when we implement it) must be expressed as:
+\[
+J_i = \mathcal{G}_i(\bar c,\text{state})\,\sinh\!\left(\frac{\Delta\mu_i}{2RT}\right)
+\]
+or equivalent, where \(\Delta\mu_i\) includes both concentration/activity and electrical contributions. Voltage-only forms are acceptable only for symmetric baths and must be labeled as such.
+
+### Decision 9 — Iontronics “capacitive regime” requires one chemistry-sensitive diagnostic
+Charge balance and thickness scaling are necessary but not sufficient. For the iontronics module to claim “reversible capacitive regime,” we will require **one additional orthogonal diagnostic** (e.g., CV redox peak criterion, EQCM mass balance, pH/O\(_2\) monitoring, or gas evolution threshold) with a quantitative pass/fail rule.
+
+---
+
+## Where we stand relative to the agenda questions (mid-meeting)
+- Q1 (Does framework describe your field?): yes, with explicit additions:
+  - electrochemistry: concentrated-solution bulk closure + reactive interfaces
+  - membranes: Donnan + fixed charge + finite membrane layer
+  - biology: discrete-state/occupancy + gating state variable
+  - iontronics: volumetric storage state \(q\) + coupling \(\sigma_e(q)\)
+- Q2 (Key boundary/interface physics): now better framed as module types J/L/D.
+- Q3 (Terminology adopt vs replace): we have strong candidates (see follow-ups below), but we will finalize after Round 3.
+
+---
+
+## Follow-up questions for Round 3 (targeted, to close remaining rigor gaps)
+
+### Electrochemistry Scientist
+1) **Define \(D_\text{chem}\) precisely**: In your A1.2 equations, is \(D_\text{chem}(c)\) the chemical diffusion coefficient of the salt (including thermodynamic factor effects), or is it closer to a tracer/self diffusion? Provide:
+   - definition in one sentence,
+   - typical value at 1 M (order-of-magnitude),
+   - how it is measured (e.g., restricted diffusion, concentration cell, etc.).
+2) **A1.2 convention lock**: Do you prefer the convention where \(\chi\) appears only in the current relation (as you wrote), or folded into \(D_\text{chem}\)? Pick one and we will freeze it.
+
+### Membrane Science Expert
+3) For A1.1 baseline, do we assume \(D_+^m=D_-^m\) (simplest) or allow asymmetry? If asymmetry is important, give a realistic ratio \(D_+^m/D_-^m\) for a CEM and one citation class (e.g., “tracer diffusion studies typically show…”).
+4) Provide one “wrong prediction” example if someone treats Donnan as a diffuse double layer (e.g., wrong salinity dependence of exclusion or wrong scaling with \(\lambda_D\))—one sentence + one number.
+
+### Biological Ion Transport Scientist
+5) Please rewrite your reduced operator explicitly in terms of \(\Delta\mu_i\) for a two-reservoir system (left/right baths). Specify what you use for \(\bar c\) (geometric mean? arithmetic mean?) and why.
+6) Clarify: in your reduced model, is selectivity primarily in \(K_{m,i}\), in \(J_{i,\max}\), or both? Give one quantitative example that yields \(P_K/P_{Na}\sim 10^3\).
+
+### Iontronics Scientist
+7) Add one chemistry-sensitive diagnostic with a quantitative threshold. Options:
+   - CV: “no distinct redox peaks above baseline” quantified by peak current ratio,
+   - EQCM: mass change consistent with ion uptake within ±X%,
+   - pH/O\(_2\): change below a threshold during cycling,
+   - gas evolution: none observed up to a defined \(V_G\) and time.
+Pick one and define the pass/fail number.
+8) For the minimal module, do you want to output \(\sigma_e(Q)\) or \(I_D(Q,V_D)\)? Choose one for the contract.
+
+### Scientific Critic
+9) Propose the **minimal module contract template** (bullet list) that we will enforce for all J/L/D modules in the next meeting notes. Keep it to ~8–10 items max.
+10) Confirm whether we need a separate “reaction module” category or whether reactions are just a special case of Type D (discrete kinetics) or Type L (distributed source term).
+
+---
+
+## What we will do in Round 3 (process)
+- Each expert will answer the above targeted questions (not re-litigate the whole framework).
+- We will then finalize:
+  1) the <200-word unified framework statement,
+  2) the terminology table (adopt/replace),
+  3) 3–5 cross-field testable predictions/experiments.
+
+Proceed to Round 3 in the same order.
+
+## User
+
+Electrochemistry Scientist, please provide your thoughts on the discussion (round 3 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Electrochemistry Scientist
+
+### Assumptions (for answering the Chair’s Round-3 questions)
+- Binary 1:1 electrolyte, 1D planar.
+- A1.2 is **electroneutral bulk** with concentrated-solution constitutive laws.
+- No homogeneous reactions in the electrolyte bulk (so \(\partial_x i_e=0\) in A1 geometry).
+
+---
+
+## 1) What exactly is \(D_\text{chem}\) in A1.2? Typical value and measurement route
+
+### Definition (what I mean, explicitly)
+In A1.2, \(D_\text{chem}(c)\) is the **chemical diffusion coefficient of the salt** governing relaxation of salt concentration gradients in the electrolyte under electroneutrality:
+\[
+N_s = -D_\text{chem}(c)\,\frac{\partial c}{\partial x}
+\]
+where \(N_s\) is the salt flux (mol m\(^{-2}\) s\(^{-1}\)) and \(c\) is **salt concentration** (mol m\(^{-3}\)).
+
+It is **not** the self/tracer diffusion coefficient of Li\(^+\) or PF\(_6^-\). It is an effective transport coefficient that can incorporate thermodynamic non-ideality and ion–ion coupling depending on convention.
+
+### Typical magnitude (order-of-magnitude, established)
+For LiPF\(_6\) in carbonate solvents around ~1 M, a reasonable order-of-magnitude is:
+\[
+D_\text{chem} \sim 10^{-10}\ \mathrm{m^2/s}
+\]
+with variation perhaps \(0.5\times 10^{-10}\) to \(3\times 10^{-10}\) m\(^2\)/s depending on solvent blend and concentration. (This is consistent with the “seconds to tens of seconds” salt relaxation times over 100 µm scales used in battery modeling.)
+
+### How it is measured / inferred (established methods, but not always consistent)
+- **Restricted diffusion / concentration-cell methods** (electrochemical): infer chemical diffusion from relaxation of concentration gradients or from concentration cell potentials combined with transport properties.
+- **PFG-NMR** gives **self-diffusion** \(D_\text{self}\) of each species; converting to \(D_\text{chem}\) requires thermodynamic factor and Stefan–Maxwell/Onsager relations (so it’s not direct).
+- **Stefan–Maxwell parameterization**: fit a consistent set \(\{\kappa, t_+^0, \chi, D_\text{chem}\}\) from multiple experiments (conductivity, transference, concentration cell, etc.). This is the gold standard but data are scarce.
+
+**Uncertainty statement (important):** across literature, \(D_\text{chem}\) can easily vary by ±30% (or more) due to method and definition differences—hence the Chair’s “sensitivity study” policy is appropriate.
+
+---
+
+## 2) Convention lock: keep \(\chi\) explicit (my recommendation)
+To avoid ambiguity, I recommend we **keep \(\chi(c)\) explicit in the current relation** (as in the Newman form) and treat \(D_\text{chem}(c)\) as the chemical diffusion coefficient appearing in salt conservation.
+
+Reason: many electrochemistry readers recognize \((1-t_+^0)\chi\) as the “concentration overpotential lever,” and it prevents accidental double-counting if someone imports a \(D\) that already folded in \(\chi\).
+
+So for A1.2 we freeze:
+- current relation includes \(\chi(c)\) explicitly,
+- salt conservation uses \(D_\text{chem}(c)\) as defined above,
+- and we require a note in the reporting table: “\(D_\text{chem}\) does/does not include \(\chi\)”—but we will standardize to “does not” for A1.2.
+
+---
+
+## Additional electrochemistry-specific terminology recommendation (for Q3 later)
+Adopt:
+- **“chemical diffusion coefficient”** \(D_\text{chem}\) (explicitly distinguished from self diffusion),
+- **“thermodynamic factor”** \(\chi\),
+- **“solvent-frame transference number”** \(t_+^0\).
+
+Replace/qualify:
+- “diffusivity \(D\)” without specifying whether it is self, tracer, chemical, or effective-medium corrected.
+
+---
+
+## One polite disagreement / caution (re: Poisson triggers)
+The Chair’s Poisson trigger based on \(\Pi>1\) and \(c(0)/c_b<10^{-2}\) is reasonable for A1, but in battery electrolytes you can get strong concentration overpotentials and transport limitation **well before** true space charge forms, because \(\kappa(c)\) collapses and \(\chi(c)\) rises. So I’d emphasize: even if Poisson is not invoked, A1.2 can still show “soft limiting” behavior via state-dependent \(\kappa(c)\) and \(t_+^0(c)\). That’s not a contradiction—just a reminder not to equate “overlimiting/space charge” with “transport limitation.”
+
+That’s all for Round 3.
+
+## User
+
+Membrane Science Expert, please provide your thoughts on the discussion (round 3 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Membrane Science Expert
+
+### Assumptions (for Round-3 questions)
+- A1.1: planar 1D, binary 1:1 electrolyte, steady state.
+- Membrane is a swollen IEM with electroneutral bulk and fixed charge \(X\) (water-phase basis).
+- Donnan partitioning at interfaces (Type J) + finite-thickness membrane transport (Type L).
+- Ideal activities in both solution and membrane water phase for the A1.1 baseline (as Chair decided).
+
+---
+
+## 3) Should A1.1 baseline assume \(D_+^m=D_-^m\)? If not, what ratio is realistic?
+
+### Recommendation
+For **A1.1 baseline**, I recommend we start with the simplest symmetric case:
+\[
+D_+^m = D_-^m \equiv D_m
+\]
+This isolates the effect of **fixed charge \(X\)** and Donnan partitioning on co-ion exclusion and permselectivity without introducing extra degrees of freedom.
+
+Then, in an A1.1 “variant” (call it A1.1b), we allow asymmetry \(D_+^m\neq D_-^m\) to represent realistic membranes.
+
+### Realistic magnitude of asymmetry (order-of-magnitude)
+In many CEMs, co-ions (anions) are both **less abundant** (Donnan exclusion) and often **less mobile** due to electrostatic/hydration interactions in the polymer. A plausible range is:
+\[
+\frac{D_+^m}{D_-^m} \sim 2\text{ to }10
+\]
+I would not claim a universal number; it depends strongly on membrane chemistry, water content, and ion identity. But ratios of a few are common in effective-property fits.
+
+**Established vs hypothesis:** the existence of asymmetry is established; the exact ratio is membrane-specific and often inferred (not directly measured), so treat it as a sensitivity parameter unless a specific membrane is named.
+
+---
+
+## 4) One “wrong prediction” if someone treats Donnan as a diffuse double layer (with one number)
+
+### The category error
+If you treat Donnan exclusion as “EDL screening” controlled primarily by Debye length \(\lambda_D\), you will predict that selectivity collapses when \(\lambda_D\) becomes small at high salinity. That is **not** the correct control parameter for an IEM, where the dominant lever is \(\Xi=X/c_b\) (fixed charge relative to external salt).
+
+### Concrete wrong prediction (numeric)
+Take a CEM with \(X=1\) M (water phase).
+
+- At \(c_b=0.1\) M: \(\Xi=10\) → strong co-ion exclusion.
+- At \(c_b=1\) M: \(\Xi=1\) → substantial co-ion leakage.
+
+Now compare Debye lengths:
+- 0.1 M: \(\lambda_D \approx 1\) nm (order-of-magnitude)
+- 1 M: \(\lambda_D \approx 0.3\) nm
+
+An “EDL screening” story would say: “\(\lambda_D\) shrinks 3×, so electrostatic exclusion should weaken dramatically.” But the **actual** Donnan prediction is governed by \(\Xi\), which changes **10×**, and the co-ion concentration in the membrane changes accordingly.
+
+Using the ideal Donnan relation for 1:1 salt in a CEM:
+\[
+c_-^m = \frac{-X+\sqrt{X^2+4c_b^2}}{2}
+\]
+- If \(X=1\) M, \(c_b=0.1\) M → \(c_-^m\approx 0.01\) M (10× exclusion).
+- If \(X=1\) M, \(c_b=1\) M → \(c_-^m\approx 0.62\) M (only ~1.6× exclusion).
+
+So the correct model predicts a **~60× increase** in co-ion concentration in the membrane when going from 0.1 M to 1 M external salt, driven by \(\Xi\), not by \(\lambda_D\). Any model that ties exclusion primarily to \(\lambda_D\) will get the salinity dependence wrong in both magnitude and mechanism.
+
+### Where the analogy holds/breaks
+- **Holds:** both Donnan and EDL involve electrostatics and potential differences.
+- **Breaks:** Donnan is a **partition equilibrium under electroneutrality with fixed charge**; EDL is a **space-charge region** described by Poisson–Boltzmann. Conflating them misidentifies the design lever (fixed charge vs screening length).
+
+---
+
+## One refinement to the unified framework (membrane-specific but generalizable)
+For A1.1, we should explicitly include in the module contract that \(X\) is a **constraint** (closure) rather than a “parameter in \(\mu^{ex}\)”—because in practice it enters as electroneutrality, not as a fitted energy term. This helps keep \(\mu^{ex}\) from becoming a dumping ground.
+
+That’s my Round 3 input.
+
+## User
+
+Biological Ion Transport Scientist, please provide your thoughts on the discussion (round 3 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Biological Ion Transport Scientist
+
+### Assumptions (for rewriting the reduced operator)
+- Two well-mixed reservoirs (Left/Right) separated by an interface module.
+- Monovalent ions unless stated; temperature fixed.
+- The reduced operator is meant to represent an **open-state permeation element** (no gating dynamics here).
+- We want the operator to satisfy the **equilibrium check**: if \(\Delta\mu_i=0\), then \(J_i=0\).
+
+---
+
+## 5) Reduced biology operator written in \(\Delta\mu_i\) form (thermodynamically consistent)
+
+### Define electrochemical potential difference
+For ion \(i\) between Left (L) and Right (R):
+\[
+\Delta \mu_i \equiv \mu_{i,L}-\mu_{i,R}
+= RT\ln\!\left(\frac{a_{i,L}}{a_{i,R}}\right) + z_iF(\phi_L-\phi_R)
+\]
+(If we assume ideality in baths, \(a_{i}\propto c_i\).)
+
+### Define a concentration scale \(\bar c_i\)
+To keep the operator symmetric and well-behaved under exchange L↔R, I recommend the **geometric mean**:
+\[
+\bar c_i \equiv \sqrt{c_{i,L}c_{i,R}}
+\]
+Rationale: it is symmetric, and it naturally appears in some barrier-crossing approximations; it also avoids biasing toward the higher-concentration side.
+
+### Proposed A2-lite flux law (one-ion version)
+\[
+\boxed{
+J_i = J_{i,\max}\,\frac{\bar c_i}{K_{m,i}+\bar c_i}\,
+\sinh\!\left(\frac{\Delta\mu_i}{2RT}\right)
+}
+\]
+- **Equilibrium check:** if \(\Delta\mu_i=0\), \(\sinh(0)=0\Rightarrow J_i=0\).
+- **Odd symmetry:** swapping L and R flips \(\Delta\mu_i\to -\Delta\mu_i\Rightarrow J_i\to -J_i\).
+- **Saturation:** at high \(\bar c_i\), prefactor approaches \(J_{i,\max}\).
+
+### What this is (and is not)
+- **Is:** a reduced, thermodynamically consistent “permeation element” that can be plugged into A1 as a Type D module without pretending to resolve Å-scale structure.
+- **Is not:** a mechanistic selectivity-filter model; it compresses dehydration/coordination/correlation physics into \(K_{m,i}\) and \(J_{i,\max}\).
+
+---
+
+## 6) Where does selectivity live: \(K_{m,i}\), \(J_{i,\max}\), or both?
+
+### My recommendation
+For a minimal benchmark module, put **most selectivity into \(K_{m,i}\)** (occupancy/affinity) and keep \(J_{i,\max}\) comparable across similar monovalent ions unless there is evidence of different maximal throughput.
+
+Reason: in many channels, the dominant discrimination is **binding/partition into the filter** (free-energy of transfer), while the maximal throughput is set by knock-on barriers and access. But there are channels where throughput differs too; we can allow both.
+
+### Quantitative example targeting \(P_K/P_{Na}\sim 10^3\) (reduced-model demonstration)
+Assume symmetric baths and small voltage so \(\sinh(\Delta\mu/2RT)\approx \Delta\mu/2RT\) and compare prefactors at the same \(\bar c\).
+
+Let:
+- \(J_{K,\max}=J_{Na,\max}\) (same max)
+- \(K_{m,K}=10\) mM
+- \(K_{m,Na}=10\) M
+
+At \(\bar c=100\) mM:
+- K\(^+\): \(\bar c/(K_m+\bar c)=0.1/(0.01+0.1)\approx 0.91\)
+- Na\(^+\): \(0.1/(10+0.1)\approx 0.0099\)
+
+Ratio \(\approx 92\). That’s only ~10².
+
+To reach ~10³ at the same \(\bar c\), either:
+- increase \(K_{m,Na}\) further (e.g., 100 M → ratio ~910), or
+- also reduce \(J_{Na,\max}\) by ~10× (representing a higher barrier for Na\(^+\) knock-on).
+
+So a plausible “10³-selective” reduced parameter set at \(\bar c=100\) mM could be:
+- \(K_{m,K}=10\) mM, \(K_{m,Na}=10\) M, and \(J_{Na,\max}=0.1\,J_{K,\max}\)
+which yields ~920.
+
+**Interpretation:** in real K\(^+\) channels, both affinity (occupancy) and barrier/correlation effects contribute; encoding selectivity in both parameters is reasonable and still falsifiable.
+
+---
+
+## One caution (so we don’t overclaim)
+Even with \(\Delta\mu\)-consistent form, this A2-lite operator will not capture:
+- rectification from asymmetric barriers,
+- multi-ion coupling between species (competition),
+- anomalous mole fraction effects (classic multi-ion signature).
+
+Those require a true multi-state Markov network (still Type D, but richer). For A1 integration later, A2-lite is acceptable as a placeholder if we label it clearly.
+
+That’s my Round 3 input.
+
+## User
+
+Iontronics Scientist, please provide your thoughts on the discussion (round 3 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Iontronics Scientist
+
+### Assumptions (for Round-3 questions)
+- Aqueous electrolyte, OECT-like geometry.
+- Gate referenced to Ag/AgCl (or explicitly stated reference).
+- We aim to operate in a regime where the dominant behavior is **reversible ionic uptake + electronic modulation**, not net electrolysis or irreversible polymer redox.
+
+---
+
+## 7) Add one chemistry-sensitive diagnostic + quantitative threshold (to complement charge balance + thickness scaling)
+
+### Diagnostic C (chemistry-sensitive) — CV redox-peak criterion (practical, widely used; threshold proposed)
+Protocol:
+- Run cyclic voltammetry of the **gate–channel system** (or polymer film vs reference in a three-electrode cell) over the intended operating window, at multiple scan rates (e.g., 10, 50, 100 mV/s).
+- Compare the current response to an ideal capacitive baseline \(i_C = C_\text{eff}\,v\) (where \(v\) is scan rate).
+
+Quantitative pass/fail criterion (proposed, operational):
+- Define a “peakiness” metric:
+  \[
+  P \equiv \frac{i_{\text{peak}}-i_C}{i_C}
+  \]
+  where \(i_{\text{peak}}\) is the maximum deviation from the best-fit capacitive line within the window.
+- Require:
+  \[
+  \boxed{P < 0.2 \ \text{at}\ v=50\ \text{mV/s}}
+  \]
+Interpretation: no pronounced Faradaic redox peaks; response is predominantly capacitive-like.
+
+Caveats (explicit):
+- This does **not** prove absence of all Faradaic processes (some can be broad and pseudocapacitive), but it is chemistry-sensitive and catches many redox/electrolysis signatures.
+- If oxygen reduction is present, it can appear as a broad wave; this criterion will often flag it.
+
+(If the team prefers a more direct chemical probe, EQCM mass balance is stronger but requires specialized equipment; pH/O\(_2\) monitoring is also strong but setup-dependent.)
+
+---
+
+## 8) For the minimal module contract: output \(\sigma_e(Q)\) vs \(I_D(Q,V_D)\)?
+
+### Choice: output \(I_D(Q,V_D)\) (recommended for device-level benchmarking)
+Reason: the unified framework is ultimately meant to compare **functional device behavior** across fields. For an OECT/memristive channel, the measurable output is drain current under a drain bias.
+
+So the iontronics module should return:
+\[
+\boxed{I_D(t)=\mathcal{G}\big(Q(t),V_D\big)}
+\]
+with \(Q(t)=\int i_G(t)\,dt\) (after leakage correction if needed).
+
+Minimal functional form (example, not mandatory):
+- For small \(V_D\), Ohmic channel:
+  \[
+  I_D \approx \frac{W}{L_\text{ch}}\,\sigma_e(Q)\,t\,V_D
+  \]
+  where \(t\) is film thickness and \(\sigma_e(Q)\) is a monotonic function (depletion or accumulation mode).
+- In practice, we can treat \(\sigma_e(Q)\) as an empirical monotonic mapping extracted from transfer curves, but we must report how it was obtained.
+
+**Quantitative anchor:** in many OECTs, the “charge-to-conductance” mapping is strong enough that plotting \(\Delta I_D\) vs \(Q\) collapses data across pulse shapes (this is an established diagnostic in the field).
+
+---
+
+## One polite refinement (re: “capacitive” definition)
+I agree with the Critic: coulombic efficiency near 1 is necessary but not sufficient. I’d propose we define “reversible capacitive regime” operationally for this project as:
+
+> A regime where (i) \(\eta_Q\ge 0.98\), (ii) \(\tau\propto L^{2\pm 0.3}\), and (iii) CV peakiness \(P<0.2\) in the operating window.
+
+This is not a universal truth, but it is a **benchmarkable contract**.
+
+That’s my Round 3 input.
+
+## User
+
+Scientific Critic, please provide your thoughts on the discussion (round 3 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Scientific Critic
+
+### What was well-supported in Round 3
+- **Electrochemistry** clarified \(D_\text{chem}\) as chemical (not self) diffusion and recommended a convention lock (keep \(\chi\) explicit). This directly addresses the ambiguity I flagged.
+- **Membranes** made a good methodological choice: start A1.1 with \(D_+^m=D_-^m\) to isolate fixed-charge effects, then add asymmetry as a variant. Also provided a concrete “wrong prediction” example for Donnan-as-EDL with numbers.
+- **Biology** rewrote the reduced operator in terms of \(\Delta\mu_i\) and chose a symmetric concentration scale. This is a major rigor improvement: it now passes the equilibrium check by construction.
+- **Iontronics** added a chemistry-sensitive diagnostic with a quantitative threshold and chose a device-relevant output \(I_D(Q,V_D)\). This makes the module contract testable.
+
+---
+
+## Remaining concerns / questions (2–3)
+
+### 1) Biology selectivity demonstration: parameter values are drifting into unphysical territory
+To reach \(10^3\) selectivity at \(\bar c=100\) mM, biology suggested either \(K_{m,Na}\sim 100\) M or reducing \(J_{Na,\max}\) by 10×. The latter is plausible; the former is likely not physically meaningful as a “Michaelis constant” in any literal sense.
+
+**Request:** If \(K_{m,Na}\) is used as a proxy for a free-energy penalty, translate it explicitly:
+\[
+\Delta\Delta G \approx RT\ln\left(\frac{K_{m,Na}}{K_{m,K}}\right)
+\]
+and keep \(K_m\) values within a range that maps to plausible \(\Delta\Delta G\) (say 5–15 \(k_BT\)). Otherwise the reduced model becomes numerically convenient but physically opaque.
+
+### 2) Iontronics CV “peakiness” metric needs a clearer baseline definition
+The proposed \(i_C=C_\text{eff}v\) baseline depends on how \(C_\text{eff}\) is extracted (fit region, frequency dependence, series resistance). Without a standardized procedure, two labs can compute different “peakiness” for the same data.
+
+**Request:** Specify:
+- how \(C_\text{eff}\) is estimated (e.g., linear fit of \(i\) vs \(v\) at mid-window, or from EIS at a specified frequency),
+- and whether the criterion is applied to gate current, channel current, or a three-electrode polymer-film measurement.
+
+### 3) Electrochemistry: “keep \(\chi\) explicit” is good, but we still need a single canonical A1.2 PDE set
+Electrochemistry has now given definitions, but A1.2 still risks multiple equivalent formulations (salt flux form vs diffusion form). This is solvable: we just need to publish the canonical equations in the benchmark spec.
+
+**Request:** Chair should freeze the exact A1.2 PDEs and boundary conditions in one place and forbid algebraic rearrangements unless equivalence is demonstrated.
+
+---
+
+## Minimal module contract template (as requested)
+I think J/L/D is sufficient; “reaction” is not a separate type—it is either:
+- **Type D** (discrete kinetics like Butler–Volmer/Markov), or
+- **Type L** (distributed source term \(R_i\) in a layer).
+
+Here is a compact contract template (10 items):
+
+1) **Module type:** J / L / D (or combination).
+2) **Domain:** location and thickness/geometry (0-thickness jump, \(L\)-thick layer, discrete element).
+3) **Inputs from core:** list variables with units (e.g., \(c_{i,L},c_{i,R},\phi_L,\phi_R,T,i(t)\), etc.).
+4) **Outputs to core:** \(J_i\) and/or \(j\), potential jump(s), and any returned effective parameters.
+5) **State variables:** names, units, initial conditions (if any).
+6) **Governing relations:** equations (jump conditions / PDE / rate laws).
+7) **Parameters:** list with units + provenance (measurement method) + uncertainty.
+8) **Validity regime:** 2–4 inequalities/dimensionless criteria (e.g., \(\Xi\gg 1\), \(\Gamma\gtrsim 1\), \(\Theta\gg 1\)).
+9) **Sanity checks:** equilibrium check (\(\Delta\mu=0\Rightarrow J=0\)) + one scaling check.
+10) **One falsifiable prediction:** a specific scaling or magnitude under a specified perturbation (e.g., thickness ×10 → \(\tau\) ×100).
+
+---
+
+## One constructive suggestion for the Chair’s final synthesis
+When writing the <200-word unified framework, explicitly state that “unification” means:
+- common **conservation + \(\mu\)-gradient driving**, and
+- differences are encoded as **closures and modules** with declared regimes,
+not that all systems share the same microscopic mechanism.
+
+That will prevent overstatement and make the framework defensible to each community.
+
+## User
+
+This concludes round 3 of 4 of discussion. Symposium Chair and PI, please synthesize the points raised by each team member, make decisions regarding the agenda based on team member input, and ask follow-up questions to gather more information and feedback about how to better address the agenda.
+
+## Symposium Chair and PI
+
+## Round 3 Synthesis (Chair/PI)
+
+### What is now “locked in” (we can write the framework without hand-waving)
+1) **A1.2 electrochemistry closure is defined and terminology-clean**  
+   - \(D_\text{chem}\) is explicitly the **chemical diffusion coefficient of the salt** (not self diffusion).  
+   - We will **keep \(\chi(c)\) explicit** in the current relation and not fold it into \(D_\text{chem}\).  
+   - Order-of-magnitude anchor: \(D_\text{chem}\sim 10^{-10}\,\mathrm{m^2/s}\) at ~1 M for Li-salt carbonate electrolytes (with stated variability).
+
+2) **A1.1 membrane module baseline is simplified and extensible**  
+   - Baseline: \(D_+^m=D_-^m\) to isolate fixed-charge effects; variant allows asymmetry \(D_+^m/D_-^m\sim 2–10\).  
+   - We now have a crisp “wrong prediction” example for Donnan-as-EDL: salinity dependence is governed by \(\Xi=X/c_b\), not \(\lambda_D\).
+
+3) **Biology reduced operator is now thermodynamically consistent**  
+   - Flux written in terms of \(\Delta\mu_i\) and symmetric \(\bar c_i=\sqrt{c_{i,L}c_{i,R}}\), passing the equilibrium check by construction.
+
+4) **Iontronics module is now benchmarkable with a 3-part diagnostic**  
+   - Outputs: \(I_D(Q,V_D)\) (device-relevant).  
+   - Diagnostics: \(\eta_Q\ge 0.98\), \(\tau\propto L^{2\pm 0.3}\), and a CV “peakiness” criterion \(P<0.2\) (needs baseline standardization).
+
+5) **Critic provided a compact module contract template**  
+   - J/L/D module types are sufficient; “reaction” is not a separate type (it is D or L).
+
+---
+
+## Decisions (finalized after Round 3)
+
+### Decision 10 — Freeze canonical A1.2 PDE set + BCs in the benchmark spec (no algebraic variants)
+We will publish a single canonical A1.2 statement (variables, PDEs, and boundary conditions) and require any alternative formulation to demonstrate equivalence. This directly addresses the Critic’s concern about silent divergence.
+
+### Decision 11 — Biology reduced parameters must be reported as energy scales
+To prevent unphysical “\(K_m=100\) M” artifacts, biology’s reduced module must report selectivity in **\(\Delta\Delta G\) (in \(k_BT\))**:
+\[
+\Delta\Delta G \equiv RT\ln\left(\frac{K_{m,Na}}{K_{m,K}}\right)
+\]
+and/or an explicit barrier/throughput ratio via \(J_{\max}\). We will allow large \(K_m\) numerically, but only if translated into \(\Delta\Delta G\) and flagged as a proxy parameter.
+
+### Decision 12 — Standardize iontronics CV baseline procedure
+Iontronics “peakiness” \(P\) will be computed using a standardized baseline extraction (see follow-up questions below). Without this, the criterion is not reproducible.
+
+### Decision 13 — Adopt the Critic’s 10-item module contract as mandatory
+This becomes the required reporting format for each field’s add-on module(s).
+
+---
+
+## Follow-up questions for Round 4 (last round; we need closure-ready answers)
+
+### Electrochemistry Scientist (A1.2 spec finalization)
+1) Please provide the **exact A1.2 boundary conditions** you recommend at \(x=0\) for:
+   - (a) ideal cation-selective interface (what is imposed: \(J_-=0\)? \(t_+=1\)?),
+   - (b) finite selectivity (how do you parameterize leakage in electrochem terms?).
+2) Give one representative numeric value for \(\kappa\) at 1 M (order-of-magnitude is fine) so we can sanity-check voltage scales in A1.2.
+
+### Membrane Science Expert (A1.1 spec finalization)
+3) For A1.1 baseline (ideal activities), please state the **minimal BC set** at each interface in a way that a non-membrane person can implement (what is continuous, what jumps).
+4) Provide one representative \(X\) and \(L_m\) pair (e.g., \(X=1\) M water phase, \(L_m=100\,\mu\)m) and the implied \(\Xi\) for \(c_b=10\) mM and 100 mM.
+
+### Biological Ion Transport Scientist (reduced module physicality)
+5) Using your \(\Delta\mu\)-based operator, propose a parameter set that yields \(P_K/P_{Na}\sim 10^3\) **and** report the implied \(\Delta\Delta G\) in \(k_BT\). Keep parameters in a plausible range and state which parameter carries most selectivity (affinity vs throughput).
+6) Confirm whether your operator is intended for **single-ion independent flux** or whether you want a minimal competition term (e.g., shared occupancy) for multi-ion mixtures.
+
+### Iontronics Scientist (CV baseline standardization)
+7) Specify exactly how \(C_\text{eff}\) is extracted for the peakiness metric:
+   - from EIS at a specified frequency? or
+   - from a linear fit of \(i\) vs \(v\) in a specified sub-window?
+Also specify whether CV is done in a **three-electrode polymer-film cell** or in the full device geometry. Pick one as the benchmark default.
+8) Provide one typical \(C^*\) and \(D_{\text{ion}}\) pair for a named polymer system (even if approximate) so we can populate the reporting table with a concrete example.
+
+### Scientific Critic (framework wording)
+9) Please propose one sentence that clearly states what “unification” means here (to avoid overclaiming), suitable for the <200-word framework statement.
+
+---
+
+## What I will draft before the next (final) synthesis
+- A <200-word unified framework statement incorporating:
+  - conservation + electrochemical potentials,
+  - explicit closures,
+  - module types J/L/D,
+  - sanity checks and regime criteria.
+- A terminology mapping table (adopt/replace/qualify).
+- A list of 3–5 cross-field testable predictions/experiments tied to modules and scalings.
+
+Proceed to Round 4 in the same order; keep answers short, implementable, and with one number each.
+
+## User
+
+Electrochemistry Scientist, please provide your thoughts on the discussion (round 4 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Electrochemistry Scientist
+
+### Assumptions (for A1.2 boundary conditions and numbers)
+- 1D planar diffusion layer \(x\in[0,\delta]\), electroneutral bulk.
+- Binary 1:1 electrolyte; \(c\) is salt concentration.
+- Imposed current \(i(t)\) through the interface at \(x=0\); reservoir at \(x=\delta\).
+- No Faradaic reactions in the diffusion layer; any selectivity/leakage is encoded at \(x=0\) via a module.
+
+---
+
+## 1) A1.2 boundary conditions at \(x=0\)
+
+### (a) Ideal cation-selective interface (electrochemistry-compatible statement)
+The cleanest implementable statement is:
+\[
+\boxed{J_-(0,t)=0}
+\]
+i.e., **co-ion (anion) flux is zero** at the interface. This is the same “ideal permselective” condition used in ED theory and is unambiguous.
+
+Given electroneutral bulk and imposed current \(i\), this implies the cation flux at the interface is fixed by current:
+\[
+\boxed{J_+(0,t)=\frac{i(t)}{F}}
+\]
+(for monovalent ions; more generally \(J_+=i/(z_+F)\)).
+
+Salt flux at the interface then follows from \(N_s=(J_++J_-)/2\) for 1:1 salt:
+\[
+N_s(0,t)=\frac{J_+(0,t)}{2}=\frac{i(t)}{2F}
+\]
+This is the boundary condition that drives depletion in the diffusion layer.
+
+**Note:** This is a boundary condition on fluxes; the interface potential drop is whatever is required to satisfy the bulk constitutive law for \(i\).
+
+### (b) Finite selectivity / leakage (minimal parameterization)
+A minimal, benchmark-friendly way is to prescribe an **effective transport number at the interface** (a “leaky permselective” boundary):
+\[
+\boxed{J_+(0,t)=\frac{t_+^{\text{int}}}{F}\,i(t),\qquad
+J_-(0,t)=-\frac{(1-t_+^{\text{int}})}{F}\,i(t)}
+\]
+with \(t_+^{\text{int}}\in[0.5,1]\) for a cation-selective interface (0.5 = nonselective symmetric current carriage; 1 = ideal cation-only).
+
+This is deliberately phenomenological but:
+- it is easy to implement,
+- it maps to membrane language (transport number/permselectivity),
+- and it gives a continuous knob between A1.0 and A1.1-like behavior.
+
+If the membrane team prefers, \(t_+^{\text{int}}\) can be replaced by the full J+L membrane module (Donnan + in-membrane transport), but this “leaky BC” is a useful intermediate.
+
+---
+
+## 2) One representative \(\kappa\) value at 1 M (for voltage scale sanity checks)
+
+For a typical LiPF\(_6\) carbonate electrolyte around 1 M at room temperature, a representative order-of-magnitude is:
+\[
+\boxed{\kappa \sim 10\ \text{mS/cm} \approx 1\ \text{S/m}}
+\]
+(Depending on solvent blend and temperature, it can be a few mS/cm up to ~15 mS/cm; but 10 mS/cm is a good benchmark number.)
+
+**Voltage drop sanity check:** with \(i=10\) mA/cm\(^2\) (=100 A/m\(^2\)), \(\delta=100\,\mu\)m, and \(\kappa=1\) S/m, the ohmic drop scale is:
+\[
+\Delta\phi_{\Omega}\sim \frac{i\,\delta}{\kappa}\approx \frac{100\times 10^{-4}}{1}=0.01\ \text{V} = 10\ \text{mV}
+\]
+So concentration overpotential of tens of mV is indeed comparable to or larger than ohmic drop at these conditions—consistent with why \(\chi\) and \(t_+^0\) matter.
+
+---
+
+## One final caution (scope)
+The “leaky transport-number BC” is a convenient A1.1-lite, but it is not a substitute for a real membrane J+L module when we care about membrane thickness dependence or internal CP. I suggest we keep it as an optional A1.0→A1.1 bridge, not the final A1.1 definition.
+
+That’s my Round 4 input.
+
+## User
+
+Membrane Science Expert, please provide your thoughts on the discussion (round 4 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Membrane Science Expert
+
+### Assumptions (A1.1 baseline)
+- 1D planar, steady state.
+- Binary 1:1 electrolyte; ideal activities in solution and membrane water phase.
+- Membrane is a CEM with fixed charge \(X>0\) (water-phase basis), electroneutral membrane bulk.
+- Donnan partition at each interface (Type J) + finite-thickness membrane transport (Type L).
+- No convection.
+
+---
+
+## 3) Minimal BC set at each solution/membrane interface (implementable)
+
+Let the left solution/diffusion layer be “s” and membrane be “m”. At each interface (e.g., at \(x=0\) and \(x=L_m\)) we impose:
+
+### (i) Donnan partition (Type J): electrochemical potential continuity
+For each ion \(i\in\{+,-\}\):
+\[
+\boxed{RT\ln c_i^{s} + z_iF\phi^{s} = RT\ln c_i^{m} + z_iF\phi^{m}}
+\]
+This implies a **potential jump** \(\Delta\phi_D=\phi^m-\phi^s\) and concentration jump \(c_i^m/c_i^s\).
+
+### (ii) Membrane electroneutrality closure (in membrane water phase)
+At the interface (and throughout membrane bulk):
+\[
+\boxed{c_+^{m}-c_-^{m}=X}
+\]
+Together with (i), this determines the interfacial membrane concentrations \(c_\pm^m\) and \(\Delta\phi_D\) given the solution-side \(c_\pm^s\).
+
+### (iii) Flux continuity (Type L coupling)
+For each ion:
+\[
+\boxed{J_i^{s} = J_i^{m}}
+\]
+(no accumulation at the mathematical interface).
+
+### (iv) Potential reference / continuity convention
+Potential itself is not continuous because of Donnan jump; we therefore:
+- solve \(\phi^s(x)\) in solution regions and \(\phi^m(x)\) in membrane,
+- enforce (i) rather than \(\phi\)-continuity.
+
+That’s the minimal, unambiguous set: (i) electrochemical potential continuity, (ii) electroneutrality with fixed charge, (iii) flux continuity.
+
+**Implementation note:** In practice, you solve the solution diffusion layer(s) and membrane layer simultaneously with these interface conditions; the Donnan jump is an algebraic constraint at each interface.
+
+---
+
+## 4) Representative \(X\), \(L_m\), and implied \(\Xi\) at 10 mM and 100 mM
+
+Choose a representative commercial CEM-like case:
+- \(\boxed{X=1\ \text{M (membrane water phase)}}\)
+- \(\boxed{L_m=100\,\mu\text{m}}\)
+
+Then:
+- For \(c_b=10\) mM = 0.01 M:
+  \[
+  \Xi=\frac{X}{c_b}=\frac{1}{0.01}=100
+  \]
+  Strong permselectivity expected; co-ion concentration at interface (ideal Donnan) is:
+  \[
+  c_-^m \approx \frac{-1+\sqrt{1+4(0.01)^2}}{2}\approx 1\times 10^{-4}\ \text{M}
+  \]
+  i.e., ~100× exclusion at equilibrium (order-of-magnitude).
+
+- For \(c_b=100\) mM = 0.1 M:
+  \[
+  \Xi=\frac{1}{0.1}=10
+  \]
+  Still strongly selective but noticeably more co-ion leakage; ideal Donnan gives:
+  \[
+  c_-^m \approx \frac{-1+\sqrt{1+4(0.1)^2}}{2}\approx 0.01\ \text{M}
+  \]
+  ~10× exclusion.
+
+These numbers are consistent with the “2–5 \(k_BT\)” Donnan exclusion scale discussed earlier (10× → 2.3 \(k_BT\); 100× → 4.6 \(k_BT\)).
+
+---
+
+## One polite alignment note with electrochemistry BCs
+I like the electrochemistry proposal of using a “leaky transport-number boundary condition” as an A1.0→A1.1 bridge. But for A1.1 proper, we should keep the **J+L membrane module** because it predicts thickness dependence and internal voltage drop, which the leaky BC cannot.
+
+That’s my Round 4 input.
+
+## User
+
+Biological Ion Transport Scientist, please provide your thoughts on the discussion (round 4 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Biological Ion Transport Scientist
+
+### Assumptions (for the requested parameter set)
+- Two reservoirs (L/R), ideal activities in baths for this reduced example.
+- Monovalent ions K\(^+\) and Na\(^+\).
+- Same electrical driving for both ions (same \(\Delta\phi\)); selectivity arises from the module parameters.
+- We are in a regime where the reduced operator is used as an **effective permeation element** (open state), not resolving multi-ion competition unless we add it explicitly.
+
+---
+
+## 5) A2-lite parameter set giving \(P_K/P_{Na}\sim 10^3\) + implied \(\Delta\Delta G\) (in \(k_BT\))
+
+### Reduced operator (from Round 3)
+\[
+J_i = J_{i,\max}\,\frac{\bar c_i}{K_{m,i}+\bar c_i}\,
+\sinh\!\left(\frac{\Delta\mu_i}{2RT}\right)
+\]
+For a “selectivity ratio” demonstration under the same driving force, compare the prefactors:
+\[
+\frac{J_K}{J_{Na}} \approx 
+\frac{J_{K,\max}}{J_{Na,\max}}
+\cdot
+\frac{\bar c/(K_{m,K}+\bar c)}{\bar c/(K_{m,Na}+\bar c)}
+\]
+assuming \(\Delta\mu_K\approx \Delta\mu_{Na}\) (same \(\Delta\phi\), similar bath ratios).
+
+### Choose a plausible concentration point
+Let \(\bar c = 100\) mM (0.1 M), representative of many electrophysiology conditions.
+
+### Parameter choice (kept physically interpretable)
+- **Affinity/occupancy selectivity**:
+  - \(K_{m,K}=10\) mM
+  - \(K_{m,Na}=1\) M  
+  This is a 100× ratio, which corresponds to:
+  \[
+  \Delta\Delta G_{K_m} = RT\ln\left(\frac{K_{m,Na}}{K_{m,K}}\right)
+  = RT\ln(100)\approx 4.6\,k_BT
+  \]
+- **Throughput/barrier selectivity**:
+  - \(J_{K,\max}/J_{Na,\max}=20\)  
+  Interpretable as Na\(^+\) having a higher effective barrier / poorer knock-on throughput.
+
+Now compute the occupancy factors at \(\bar c=0.1\) M:
+- K\(^+\): \(0.1/(0.01+0.1)=0.91\)
+- Na\(^+\): \(0.1/(1+0.1)=0.091\)
+Ratio from occupancy term ≈ 10.
+
+Total flux ratio:
+\[
+\frac{J_K}{J_{Na}} \approx 20 \times 10 \approx 200
+\]
+This is **not yet** \(10^3\).
+
+To reach \(10^3\) while keeping parameters plausible, increase throughput ratio modestly and/or increase \(K_m\) ratio:
+
+**Revised set (still interpretable):**
+- \(K_{m,K}=10\) mM
+- \(K_{m,Na}=3\) M  (300× → \(\Delta\Delta G_{K_m}\approx \ln(300)\approx 5.7\,k_BT\))
+- \(J_{K,\max}/J_{Na,\max}=30\)
+
+Occupancy factors:
+- K: 0.91
+- Na: \(0.1/(3+0.1)=0.032\)
+Occupancy ratio ≈ 28.4
+
+Total:
+\[
+\frac{J_K}{J_{Na}} \approx 30\times 28.4 \approx 850
+\]
+Close to \(10^3\). If we set \(J_{K,\max}/J_{Na,\max}=35\), we get \(\sim 1000\).
+
+### Energy accounting (what this implies)
+- From \(K_m\) ratio (300×): \(\sim 5.7\,k_BT\)
+- From \(J_{\max}\) ratio (35×): can be interpreted as an additional barrier difference:
+  \[
+  \Delta\Delta G_{\text{barrier}} \approx RT\ln(35)\approx 3.6\,k_BT
+  \]
+Total effective discrimination scale \(\sim 9.3\,k_BT\), consistent with the “7–10 \(k_BT\)” ballpark for strong K\(^+\)/Na\(^+\) selectivity.
+
+**Established vs hypothesis:** the overall energy scale is established; partitioning it into “\(K_m\) vs \(J_{\max}\)” is a modeling hypothesis in this reduced representation.
+
+---
+
+## 6) Independent flux vs minimal competition term?
+
+### Recommendation: add minimal competition (shared occupancy) if we ever run mixtures
+If we only ever test single-salt conditions (pure KCl or pure NaCl), independent flux operators are fine.
+
+But if we want to represent a realistic selectivity experiment (K\(^+\) and Na\(^+\) present simultaneously), we need at least a **shared occupancy** constraint; otherwise the model can overpredict total flux and miss competitive block.
+
+A minimal competitive extension (still reduced, but captures exclusion) is:
+\[
+J_i = J_{i,\max}\,\frac{\bar c_i}{K_{m,i}+\sum_j \bar c_j}\,
+\sinh\!\left(\frac{\Delta\mu_i}{2RT}\right)
+\]
+This enforces that ions compete for a common “site capacity” in the reduced sense.
+
+**Where this holds/breaks:** it captures first-order competition but will not reproduce anomalous mole fraction effects or multi-ion knock-on signatures; those require a true multi-state Markov network.
+
+That’s my Round 4 input.
+
+## User
+
+Iontronics Scientist, please provide your thoughts on the discussion (round 4 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Iontronics Scientist
+
+### Assumptions (for standardizing the CV baseline and giving example parameters)
+- Aqueous electrolyte; polymer film is the active ion-storage medium.
+- We want a benchmark protocol that is reproducible across labs, even if not “perfectly fundamental.”
+- We accept that CV is a screening diagnostic; it complements (does not replace) charge balance and thickness scaling.
+
+---
+
+## 7) Standardize how \(C_\text{eff}\) is extracted for the CV “peakiness” metric, and choose benchmark geometry
+
+### Benchmark default: **three-electrode polymer-film cell** (recommended)
+Reason: device-level CV (gate–channel) mixes polymer response with electrode polarization, contact resistances, and geometry-dependent electrolyte drops. A three-electrode cell isolates the polymer’s electrochemical signature and is more transferable.
+
+**Default setup**
+- Working electrode: polymer film on inert conductor (e.g., Au, Pt, ITO).
+- Reference: Ag/AgCl (state explicitly).
+- Counter: Pt mesh.
+- Electrolyte: same as device electrolyte (state concentration, pH).
+
+### Baseline extraction for \(C_\text{eff}\): linear fit in a defined sub-window
+To compute the capacitive baseline \(i_C=C_\text{eff}v\), we need a standardized way to estimate \(C_\text{eff}\) from the CV itself (no EIS required).
+
+**Procedure (benchmark)**
+1) Choose the intended operating window \([V_\text{min},V_\text{max}]\).
+2) Define a “baseline region” as the central 40% of the window:
+   \[
+   V\in\left[V_\text{min}+0.3\Delta V,\;V_\text{min}+0.7\Delta V\right],\quad \Delta V=V_\text{max}-V_\text{min}
+   \]
+3) At a fixed scan rate \(v=50\) mV/s, compute the median absolute current in that region on the forward scan, \(i_\text{med}\).
+4) Define:
+   \[
+   \boxed{C_\text{eff}=\frac{i_\text{med}}{v}}
+   \]
+5) Then compute peakiness:
+   \[
+   \boxed{P=\frac{i_\text{peak}-i_C}{i_C}}
+   \]
+   where \(i_\text{peak}\) is the maximum absolute current in the full window (forward scan), and \(i_C=C_\text{eff}v\).
+
+This is intentionally simple and reproducible. It will not perfectly correct for series resistance, but it provides a consistent screen for pronounced Faradaic features.
+
+**Pass/fail (from Round 3):** \(P<0.2\) at \(v=50\) mV/s.
+
+---
+
+## 8) Provide one typical \(C^*\) and \(D_{\text{ion}}\) pair for a named polymer system
+
+Example system (commonly used OECT channel material):
+- **PEDOT:PSS** (aqueous operation; depletion-mode OECT)
+
+Representative (order-of-magnitude) parameters under hydrated conditions:
+- \[
+  \boxed{C^*\approx 20\ \mathrm{F/cm^3}}
+  \]
+- \[
+  \boxed{D_{\text{ion}}\approx 1\times 10^{-11}\ \mathrm{m^2/s}}
+  \]
+
+**Sanity check time constant:** for \(L=100\) nm,
+\[
+\tau\sim \frac{L^2}{D}\sim \frac{(10^{-7})^2}{10^{-11}}=10^{-3}\ \text{s} = 1\ \text{ms}
+\]
+consistent with ms-scale switching in thin films.
+
+**Uncertainty note (important):** both \(C^*\) and \(D_{\text{ion}}\) can vary by ~2× across labs and by up to ~10× with hydration/doping; for the benchmark we should report them with uncertainty bands and the hydration condition.
+
+---
+
+## One polite caution
+Even in a three-electrode cell, PEDOT:PSS can show pseudocapacitive redox-like behavior that is largely reversible. Our project’s definition of “capacitive regime” should therefore be operational (as we’re doing) rather than claiming “no redox at all.” If we truly need “no chemical transformation,” we’ll need stronger chemical analytics (e.g., in situ spectroscopy or gas/pH monitoring).
+
+That’s my Round 4 input.
+
+## User
+
+Scientific Critic, please provide your thoughts on the discussion (round 4 of 4). If you do not have anything new or relevant to add, you may say "pass". Remember that you can and should (politely) disagree with other team members if you have a different perspective.
+
+## Scientific Critic
+
+### What was well-supported in Round 4
+- **Electrochemistry** gave unambiguous flux boundary conditions for ideal selectivity (\(J_-=0\)) and a clean “leaky” transport-number boundary as an intermediate. Also provided a conductivity scale and a sanity-check voltage drop—good quantitative discipline.
+- **Membranes** provided a minimal, implementable interface condition set (electrochemical potential continuity + electroneutrality + flux continuity) and concrete \(\Xi\) values at 10 and 100 mM. This is exactly what a benchmark spec needs.
+- **Biology** responded to the “unphysical \(K_m\)” concern by translating selectivity into energy scales and distributing discrimination between affinity (\(K_m\)) and throughput (\(J_{\max}\)). Also proposed a minimal competition term—important if mixtures are tested.
+- **Iontronics** standardized the CV baseline extraction and chose a three-electrode polymer-film geometry, which is a defensible move to improve reproducibility. Provided named-system parameter anchors.
+
+Overall, Round 4 produced implementable boundary conditions and measurement protocols—this is now close to a publishable benchmark spec.
+
+---
+
+## Remaining concerns (2–3) to flag before final synthesis
+
+### 1) Electrochemistry “leaky transport-number BC” is convenient but risks violating equilibrium constraints
+Prescribing \(J_+\) and \(J_-\) purely from a fixed \(t_+^{\text{int}}\) under imposed current is fine as a phenomenological boundary, but it can violate the equilibrium sanity check unless we specify the corresponding potential jump/energetics. In other words, it is not derived from \(\Delta\mu\) continuity; it is a current-partition rule.
+
+**Suggestion:** Keep it explicitly labeled as **A1.0→A1.1 bridge** (as electrochemistry already cautioned), not as a physical membrane model. For any “real” selectivity module, require either:
+- a Donnan+layer membrane (A1.1), or
+- a \(\Delta\mu\)-based boundary law that guarantees \(J=0\) at \(\Delta\mu=0\).
+
+### 2) Biology reduced model: parameter identifiability and overfitting risk
+The biology module now has at least two knobs per ion (\(K_{m,i}\), \(J_{i,\max}\)), plus optional competition. This can fit many datasets but may not be identifiable from limited measurements.
+
+**Suggestion:** For the benchmark, constrain one degree of freedom by design:
+- either fix \(J_{K,\max}=J_{Na,\max}\) and put selectivity in \(K_m\) (energy),
+- or fix \(K_{m,Na}/K_{m,K}\) from an assumed \(\Delta\Delta G\) and fit only \(J_{\max}\).
+Otherwise, the module can become a flexible curve-fit rather than a transferable operator.
+
+### 3) Iontronics CV “peakiness” metric: still sensitive to series resistance and scan direction
+The standardized procedure is a good start, but peakiness can be distorted by uncompensated resistance (iR drop) and by asymmetry between forward/reverse scans.
+
+**Suggestion:** Add two minimal controls:
+- report solution resistance \(R_s\) (from high-frequency EIS or current interrupt) and whether iR compensation was used,
+- compute \(P\) on both forward and reverse scans and take the max.  
+This keeps the criterion robust without adding too much burden.
+
+---
+
+## Requested one-sentence definition of “unification” (for the <200-word statement)
+“Unification here means that all systems obey conservation laws with fluxes driven by electrochemical potential gradients, while field-specific behavior enters only through explicitly declared closures and modular interface/layer/state operators with stated validity regimes and falsifiable predictions.”
+
+That’s all for Round 4.
+
+## User
+
+Symposium Chair and PI, please summarize the meeting in detail for future discussions, provide a specific recommendation regarding the agenda, and answer the agenda questions (if any) based on the discussion while strictly adhering to the agenda rules (if any).
+
+As a reminder, here is the agenda for the meeting:
+
+
+ROUND 3: Build a Unified Framework and Identify Field-Specific Extensions
+
+Objective: Agree on a common theoretical core and clearly define how each field extends it.
+
+The Chair will present a draft "unified framework" based on Rounds 1-2.
+
+Each expert will:
+
+A. VALIDATE OR CHALLENGE THE FRAMEWORK
+   - Does it correctly represent your field?
+   - Are the equations correct and general enough?
+   - What essential features are missing?
+
+B. DEFINE YOUR FIELD'S "BOUNDARY CONDITIONS"
+   - Given the common core equations, what makes your field unique?
+   - Example: "Electrochemistry adds Butler-Volmer at interfaces"
+   - Example: "Membranes add Donnan partitioning at interfaces"
+   - Be explicit: these are ADD-ONS to the common core, not contradictions
+
+C. MAP TERMINOLOGY
+   Create a translation table:
+   - Your field's term → Common framework term
+   - Example: "Transference number" (electrochem) = "Transport number" (general)
+   - Example: "Permselectivity" (membranes) = "Selectivity" (general)
+
+D. IDENTIFY KNOWLEDGE GAPS
+   - What experiments or simulations from other fields could inform yours?
+   - What measurements are routinely done in one field but not others?
+   - Could techniques from one field solve problems in another?
+
+After each expert, the Critic assesses whether the framework truly unifies or just relabels.
+
+FINAL SYNTHESIS:
+The Chair will produce:
+1. A concise statement of the unified framework (< 200 words)
+2. A table mapping field-specific terms to common concepts
+3. A list of 3-5 testable predictions or cross-field experiments
+
+
+As a reminder, here are the agenda questions that must be answered:
+
+1. Does the proposed unified framework correctly describe your field? If not, what is missing?
+
+2. What is the key 'boundary condition' or interface physics that makes your field unique?
+
+3. What terminology from your field should be adopted vs. replaced in the unified framework?
+
+As a reminder, here are the agenda rules that must be followed:
+
+1. Clearly state assumptions before presenting equations or models
+
+2. Provide quantitative estimates whenever possible (numbers, not just trends)
+
+3. Distinguish between established facts, likely hypotheses, and speculation
+
+4. Define technical jargon when first used or translate to common language
+
+5. Acknowledge the limits of your expertise and defer to other experts appropriately
+
+6. Support claims with specific examples, data, or literature references
+
+7. When making analogies, explicitly state where they hold and where they break down
+
+Your summary should take the following form.
+
+### Agenda
+
+Restate the agenda in your own words.
+
+### Team Member Input
+
+Summarize all of the important points raised by each team member. This is to ensure that key details are preserved for future meetings.
+
+### Recommendation
+
+Provide your expert recommendation regarding the agenda. You should consider the input from each team member, but you must also use your expertise to make a final decision and choose one option among several that may have been discussed. This decision can conflict with the input of some team members as long as it is well justified. It is essential that you provide a clear, specific, and actionable recommendation. Please justify your recommendation as well.
+
+### Answers
+
+For each agenda question, please provide the following:
+
+Answer: A specific answer to the question based on your recommendation above.
+
+Justification: A brief explanation of why you provided that answer.
+
+### Next Steps
+
+Outline the next steps that the team should take based on the discussion.
+
+## Symposium Chair and PI
+
+### Agenda
+
+Build a unified, falsifiable framework for ion transport that (i) shares a common theoretical core across electrochemistry, membrane science, biological ion transport, and iontronics, and (ii) cleanly separates field-specific physics as explicit add-on “modules” (interfaces/layers/discrete elements). Deliverables: a <200-word unified framework statement, a terminology translation table, and 3–5 testable cross-field predictions/experiments.
+
+---
+
+### Team Member Input
+
+#### Electrochemistry Scientist
+**Assumptions (stated):** continuum, isothermal; typically no convection in separators; electroneutral bulk except extreme depletion/nanoconfinement; dilute NP often quantitatively wrong at ~0.5–1 M.
+
+**Core validation:** endorses conservation + electrochemical-potential driving, but insists predictiveness requires **concentrated-solution (Newman/Stefan–Maxwell/Onsager) bulk closure**, not just boundary conditions.
+
+**A1.2 bulk closure (implementable):**
+- Charge conservation in electrolyte: \(\partial_x i_e=0\Rightarrow i_e=i(t)\).
+- Current relation (keep \(\chi\) explicit):
+\[
+i_e=-\kappa(c)\partial_x\phi_e+\frac{2RT\kappa(c)}{F}(1-t_+^0(c))\chi(c)\partial_x\ln c
+\]
+- Salt conservation with **chemical diffusion coefficient** \(D_{\text{chem}}(c)\) (salt concentration variable).
+- Clarified \(D_{\text{chem}}\neq\) self diffusion; typical \(D_{\text{chem}}\sim 10^{-10}\,\mathrm{m^2/s}\) at ~1 M (order-of-magnitude).
+
+**Boundary conditions at selective interface (A1):**
+- Ideal cation-selective: \(J_-(0,t)=0\), \(J_+(0,t)=i/F\).
+- “Leaky” intermediate BC: prescribe interfacial transport number \(t_+^{\text{int}}\) so \(J_+=t_+^{\text{int}}i/F\), \(J_- = -(1-t_+^{\text{int}})i/F\) (flagged as a bridge, not a full membrane model).
+
+**Quantitative anchors:**
+- Representative conductivity at 1 M: \(\kappa\sim 10\,\mathrm{mS/cm}\approx 1\,\mathrm{S/m}\).
+- Ohmic drop scale: \(i=10\,\mathrm{mA/cm^2}\), \(\delta=100\,\mu\mathrm{m}\) → \(\Delta\phi_\Omega\sim 10\,\mathrm{mV}\).
+- Non-ideality matters: factor \((1-t_+^0)\chi\) can change 2–3× vs dilute assumptions → tens of mV errors.
+
+**Unique interface physics (modules):**
+- Faradaic kinetics (Butler–Volmer) at electrodes; interphase (SEI) as finite-thickness resistive layer (typical fitted \(R_{\text{SEI}}\sim 1–50\,\Omega\cdot\mathrm{cm^2}\), \(L_{\text{SEI}}\sim 5–50\) nm).
+
+**Terminology emphasis:** adopt “thermodynamic factor” \(\chi\), “chemical diffusion coefficient” \(D_{\text{chem}}\), and always qualify \(t_+^0\) by reference frame (solvent frame).
+
+---
+
+#### Membrane Science Expert
+**Assumptions (stated):** IEM/ED focus; electroneutral membrane bulk with fixed charge \(X\) (defined per membrane water phase); Donnan partition as a thermodynamic jump; no convection in A1.
+
+**Core validation:** agrees with \(\mu\)-gradient backbone; stresses membrane is not “just a boundary”—A1.1 must be **Jump + Layer** (Donnan + finite membrane transport).
+
+**A1.1 minimal membrane module (J+L):**
+- Parameters: \(\{X, L_m, D_+^m, D_-^m\}\) (ideal activities baseline).
+- Membrane electroneutrality: \(c_+^m-c_-^m=X\).
+- Donnan partition at each interface via electrochemical potential continuity:
+\[
+RT\ln c_i^s+z_iF\phi^s=RT\ln c_i^m+z_iF\phi^m
+\]
+- Flux continuity: \(J_i^s=J_i^m\); potential is allowed to jump (Donnan), so do not enforce \(\phi\)-continuity.
+
+**Baseline simplification:** start with \(D_+^m=D_-^m\) to isolate fixed-charge effects; variant allows asymmetry with plausible \(D_+^m/D_-^m\sim 2–10\).
+
+**Quantitative anchors:**
+- Typical IEM: \(X\sim 0.5–2\) M (water phase), \(L_m\sim 50–200\,\mu\)m, \(D_i^m\sim 10^{-11}–10^{-10}\,\mathrm{m^2/s}\) (often ×2 uncertainty).
+- Example: \(X=1\) M, \(c_b=0.1\) M → \(c_-^m\approx 0.01\) M (~10× exclusion).
+- \(\Xi=X/c_b\): at \(c_b=10\) mM, \(\Xi=100\); at 100 mM, \(\Xi=10\).
+
+**Wrong-prediction example (analogy failure):**
+- Treating Donnan as EDL screening (controlled by \(\lambda_D\)) gives wrong salinity dependence; correct control is \(\Xi=X/c_b\). Example: \(X=1\) M, \(c_b:0.1\to 1\) M increases \(c_-^m\) from ~0.01 M to ~0.62 M (~60×), not explained by \(\lambda_D\) shrinking.
+
+**Terminology emphasis:** keep “Donnan equilibrium/potential,” “fixed charge \(X\) (water phase),” “permselectivity \(\alpha\)” (as a membrane observable), and avoid conflating fixed charge (volume) with surface charge (pore-scale).
+
+---
+
+#### Biological Ion Transport Scientist
+**Assumptions (stated):** permeation within a fixed gating state; Å–nm filters with dehydration/coordination and multi-ion effects; continuum electrodiffusion works in access regions but often fails in filters.
+
+**Core validation:** accepts \(\mu\)-gradient backbone if biology can use **discrete-state (Type D) closures**; warns against hiding everything in an unconstrained \(\mu^{ex}\).
+
+**A2-lite reduced discrete module (thermodynamically consistent):**
+- Define electrochemical potential difference:
+\[
+\Delta\mu_i=RT\ln(a_{i,L}/a_{i,R})+z_iF(\phi_L-\phi_R)
+\]
+- Use symmetric concentration scale \(\bar c_i=\sqrt{c_{i,L}c_{i,R}}\).
+- Flux law:
+\[
+J_i = J_{i,\max}\frac{\bar c_i}{K_{m,i}+\bar c_i}\sinh\!\left(\frac{\Delta\mu_i}{2RT}\right)
+\]
+Passes equilibrium check (\(\Delta\mu_i=0\Rightarrow J_i=0\)).
+
+**Selectivity parameterization with energy translation:**
+- Must report discrimination as \(\Delta\Delta G\) in \(k_BT\), e.g.
+\[
+\Delta\Delta G_{K_m}=RT\ln(K_{m,Na}/K_{m,K})
+\]
+- Demonstrated that achieving \(P_K/P_{Na}\sim 10^3\) likely requires both affinity (\(K_m\) ratio) and throughput (\(J_{\max}\) ratio), yielding total discrimination ~7–10 \(k_BT\) (consistent with channel selectivity scales).
+
+**Competition (mixtures):**
+- Recommends minimal shared-occupancy competition for mixtures:
+\[
+J_i \propto \frac{\bar c_i}{K_{m,i}+\sum_j \bar c_j}
+\]
+to avoid overpredicting flux and to capture competitive block (still reduced; anomalous mole fraction effects require richer Markov models).
+
+**Quantitative anchors:** typical single-channel currents 1–20 pA at 100 mV; selectivity \(P_K/P_{Na}\sim 10^3–10^4\) corresponds to \(\Delta\Delta G\sim 7–10\,k_BT\).
+
+**Terminology emphasis:** adopt “selectivity filter,” “occupancy,” “reversal potential” as zero-current potential; caution using “permselectivity” for channels.
+
+---
+
+#### Iontronics Scientist
+**Assumptions (stated):** mixed ionic–electronic conductors; reversible capacitive regime targeted; quasi-electroneutral polymer bulk often; Poisson may matter in fast transients/thin films.
+
+**Core validation:** backbone is correct only if it includes a **state variable** for stored charge \(q\) (or \(Q\)) and a coupling law to electronic conduction (\(I_D(Q,V_D)\) or \(\sigma_e(Q)\)).
+
+**Minimal iontronics module (Type L):**
+- Finite-thickness polymer with diffusion-limited ion motion and finite capacity via volumetric capacitance \(C^*\).
+- Outputs: ionic flux/current at boundary, state evolution \(Q(t)=\int i_G dt\), and device response \(I_D(Q,V_D)\).
+
+**Quantitative anchors:**
+- \(C^*\sim 10–40\,\mathrm{F/cm^3}\) (swollen volume basis).
+- \(D_{\text{ion}}\sim 10^{-11}–10^{-10}\,\mathrm{m^2/s}\).
+- Switching time: \(\tau\sim L^2/D\) (100 nm & \(10^{-11}\) → 1 ms; 1 µm → 0.1 s).
+- Example named system: PEDOT:PSS with \(C^*\approx 20\,\mathrm{F/cm^3}\), \(D_{\text{ion}}\approx 10^{-11}\,\mathrm{m^2/s}\) (order-of-magnitude).
+
+**Diagnostics for “reversible capacitive regime” (operational definition):**
+- Charge balance: \(\eta_Q=|Q_{\text{out}}|/|Q_{\text{in}}|\ge 0.98\).
+- Thickness scaling: \(\tau\propto L^{2\pm 0.3}\).
+- Chemistry-sensitive CV screen: standardized “peakiness” \(P<0.2\) at 50 mV/s.
+
+**CV baseline standardization (benchmark default):**
+- Use **three-electrode polymer-film cell** (more reproducible than device CV).
+- Extract \(C_{\text{eff}}\) from median current in central 40% of voltage window at 50 mV/s: \(C_{\text{eff}}=i_{\text{med}}/v\); compute peakiness from deviation.
+
+**Terminology emphasis:** adopt “state variable \(q\)/\(Q\),” “volumetric charging,” “volumetric capacitance \(C^*\)” (with hydration state); qualify “capacitive vs Faradaic” as regime with diagnostics.
+
+---
+
+#### Scientific Critic
+**Unification test:** framework is genuinely unifying only if closures, units, and module contracts are explicit; otherwise it is relabeling.
+
+**Key structural correction adopted by team:**
+- Replace vague “boundary operator” with **module types**:
+  - Type J (jump/partition),
+  - Type L (finite layer with PDE/ODE),
+  - Type D (discrete kinetics/Markov).
+
+**Non-negotiables:**
+- Freeze variable definitions (e.g., \(c\) as salt concentration; \(X\) per membrane water phase; \(C^*\) per swollen volume; \(t_+^0\) with reference frame).
+- Require module sanity checks: equilibrium (\(\Delta\mu=0\Rightarrow J=0\)) and one scaling check.
+- Warned that electrochem “leaky transport-number BC” is phenomenological and may violate equilibrium unless labeled as a bridge.
+- Biology reduced model risks identifiability; recommend constraining degrees of freedom and always translating selectivity to energy scales.
+- Iontronics CV metric needs controls for series resistance and scan direction (suggest reporting \(R_s\), applying metric to both scan directions).
+
+**Module contract template (adopted):** 10 items including type, domain, inputs/outputs, state, equations, parameters+provenance+uncertainty, validity regime, sanity checks, and one falsifiable prediction.
+
+**One-sentence definition of unification (provided):**
+Unification = common conservation + \(\mu\)-gradient driving; differences enter via declared closures and modules with validity regimes and falsifiable predictions.
+
+---
+
+### Recommendation
+
+**Adopt the “Minimal Common Core + J/L/D Modules + Sanity Checks” framework as the project’s official unified theory, and freeze Benchmark A1.0–A1.2 specifications accordingly.**
+
+**Why this is the best option (justification):**
+- It preserves the only truly universal structure (conservation + electrochemical potential gradients) while preventing the Critic’s failure mode: “same equation” without closures.
+- It respects field-specific physics without forcing false equivalences:
+  - membranes require J+L (Donnan + finite membrane),
+  - electrochemistry requires bulk concentrated-solution closure and reactive interfaces,
+  - biology requires Type D discrete kinetics (or explicitly reduced operators) with energy-scale reporting,
+  - iontronics requires Type L state evolution with device coupling \(I_D(Q,V_D)\).
+- It is falsifiable: every module must pass equilibrium and scaling checks and provide at least one wrong-prediction/failure mode.
+- It is actionable: we now have implementable boundary conditions, parameter definitions, and measurement protocols.
+
+**Concrete decision embedded in the recommendation:**
+- Keep electrochemistry’s “leaky \(t_+^{\text{int}}\)” boundary condition only as an **A1.0→A1.1 bridge**, not as the membrane model.
+- For A1.2, freeze the Newman-form current relation with explicit \(\chi(c)\) and solvent-frame \(t_+^0(c)\); treat parameter uncertainty via bands unless a curated dataset is selected.
+
+---
+
+### Answers
+
+#### 1) Does the proposed unified framework correctly describe your field? If not, what is missing?
+
+**Answer:** Yes—provided the framework is implemented as a common core plus explicit J/L/D modules and field-appropriate closures. What was “missing” initially (and is now included) is: (i) concentrated-solution bulk closure for electrochemistry, (ii) finite-thickness membrane layer for membrane science, (iii) discrete-state/energy-based closure for biological filters, and (iv) state-variable storage + electronic coupling for iontronics.
+
+**Justification:** Each expert validated the backbone but required specific add-ons to remain predictive. The final framework explicitly encodes those add-ons as modules with declared assumptions and parameters.
+
+---
+
+#### 2) What is the key ‘boundary condition’ or interface physics that makes your field unique?
+
+**Answer:** The unique physics is captured by field-specific modules:
+- **Electrochemistry:** reactive interfaces (Butler–Volmer) and interphases (SEI as a finite resistive layer), plus concentrated-solution bulk constitutive laws.
+- **Membrane science (IEM/ED):** Donnan partition (Type J) + electroneutral fixed-charge membrane transport across thickness \(L_m\) (Type L).
+- **Biological ion transport:** selectivity filter as a discrete occupancy/Markov element (Type D) with strong ion-specific free energies/barriers; gating as a slower state module.
+- **Iontronics:** volumetric ion storage with finite capacity \(C^*\) and diffusion-limited dynamics (Type L) coupled to electronic conduction \(I_D(Q,V_D)\).
+
+**Justification:** These are the minimal mechanisms each field identified as essential and non-interchangeable; they extend the common core without contradicting it.
+
+---
+
+#### 3) What terminology from your field should be adopted vs. replaced in the unified framework?
+
+**Answer:** Adopt a controlled vocabulary and qualify ambiguous terms:
+- **Adopt (keep):**
+  - Electrochemistry: thermodynamic factor \(\chi\), chemical diffusion coefficient \(D_{\text{chem}}\), solvent-frame transference number \(t_+^0\) (with frame stated).
+  - Membranes: Donnan equilibrium/potential, fixed charge \(X\) (water-phase basis), permselectivity \(\alpha\) (as an observable).
+  - Biology: selectivity filter, occupancy, reversal potential \(E_{\text{rev}}\).
+  - Iontronics: state variable \(q/Q\), volumetric capacitance \(C^*\), volumetric charging.
+- **Replace/qualify (to avoid category errors):**
+  - “Transference number” → must specify reference frame (e.g., \(t_+^0\) solvent frame).
+  - “Capacitive” → must be stated as an operational regime with diagnostics (\(\eta_Q\), thickness scaling, CV screen).
+  - “Double layer ↔ Donnan ↔ filter” → explicitly label as a high-risk analogy; only “potential jump” is shared, mechanism is not.
+
+**Justification:** These choices directly address unit/reference traps and prevent misleading analogies that produce wrong predictions (e.g., Donnan-as-filter selectivity).
+
+---
+
+### Next Steps
+
+1) **Publish the Benchmark A1.x one-page spec (Version 1.0)**
+   - A1.0: dilute, electroneutral, ideal permselective BC \(J_-(0)=0\).
+   - A1.1: membrane J+L module with \(\{X,L_m,D_+^m,D_-^m\}\), Donnan jump conditions, flux continuity; baseline \(D_+^m=D_-^m\), variant with \(D_+^m/D_-^m\sim 2–10\).
+   - A1.2: Newman concentrated-solution bulk closure with explicit \(\kappa(c),t_+^0(c),\chi(c),D_{\text{chem}}(c)\); uncertainty bands unless curated dataset is chosen.
+
+2) **Adopt the 10-item module contract template (mandatory)**
+   Each field submits a filled contract for its module(s), including:
+   inputs/outputs, state variables, parameters with units/provenance/uncertainty, validity regime inequalities, equilibrium + scaling sanity checks, and one falsifiable prediction.
+
+3) **Finalize the controlled vocabulary table**
+   - Include “adopt/replace/qualify” tags and required qualifiers (frame, phase basis, hydration state).
+
+4) **Define 3–5 cross-field testable predictions/experiments (execute next)**
+   Recommended set (all are falsifiable and tied to modules):
+   - **CP scaling:** \(i_{\lim}\propto c_b/\delta\) (vary \(c_b\) and hydrodynamic \(\delta\)); applies across electrochemistry/membranes and as an access test in biology/iontronics setups.
+   - **Iontronics thickness scaling:** \(\tau\propto L^2\) (vary polymer thickness 50–200 nm).
+   - **Membrane selectivity regime map:** permselectivity vs \(\Xi=X/c_b\) (vary \(c_b\) at fixed \(X\)).
+   - **Electrochemistry non-ideality sensitivity:** concentration overpotential vs \((1-t_+^0)\chi\) (propagate uncertainty bands; identify dominant parameter).
+   - **Biology energy-scale check:** enforce that fitted selectivity corresponds to \(\Delta\Delta G\sim 7–10\,k_BT\) for \(10^3–10^4\) selectivity; reject models that cannot reach this without unphysical parameters.
+
+5) **Iontronics protocol refinement (per Critic)**
+   - Report solution resistance \(R_s\) and whether iR compensation is used.
+   - Compute CV peakiness on both scan directions and take the maximum.
+
+6) **Dataset curation decision for A1.2**
+   - Either select one named electrolyte with a self-consistent parameter set (preferred long-term), or keep A1.2 as a formal sensitivity study with declared uncertainty bands (short-term default).
+
+These steps will convert the unified framework from a conceptual synthesis into a reproducible benchmark and a modular modeling toolkit that each field can trust.
+
